@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "alt" prefixes was added to avoid Id's conflicts with app that will use this library-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    android:background="@color/alt_main_page_background_color">
+
+    <RelativeLayout
+        android:id="@+id/altHeaderLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/alt_header_panel_background">
+
+        <ImageView
+            android:id="@+id/altAppImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/ic_launcher"
+            android:contentDescription="@android:string/untitled"
+            android:padding="5dp"/>
+
+        <TextView
+            android:id="@+id/altAppNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/altAppImageView"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/alt_main_text_color"
+            android:text="@string/alt_library_name"/>
+
+    </RelativeLayout>
+	
+    <View 
+        android:id="@+id/altHeaderShadow"
+        android:layout_width="fill_parent"
+        android:layout_height="3dp"
+        android:background="@drawable/header_shadow"
+        android:layout_below="@+id/altHeaderLayout"/>
+    
+    <LinearLayout
+        android:id="@+id/altButtonsLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/altNoButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@android:string/no" />
+
+        <Button
+            android:id="@+id/altYesButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@android:string/yes" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/altButtonsLayout"
+        android:layout_below="@+id/altHeaderShadow"
+        android:layout_centerHorizontal="true" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/altHeaderMessageTextView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_margin="5dp"
+                android:textColor="@color/alt_main_text_color"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/header_diriver_gradient"/>
+            
+             <TextView
+			        android:layout_margin="5dp"
+			        android:id="@+id/altMessageTextView"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+                    android:textColor="@color/alt_main_text_color"
+			        android:gravity="left"/>
+			
+			    <EditText
+			        android:id="@+id/altIssueDescEditText"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_margin="5dp"
+			        android:ems="10"
+			        android:hint="@string/alt_describe_issue" />
+            
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

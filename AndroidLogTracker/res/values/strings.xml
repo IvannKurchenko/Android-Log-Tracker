@@ -1,0 +1,18 @@
+<resources>
+    <string name="alt_library_name">AndroidLogTracker</string>
+    
+    <!-- Notifications -->
+    <string name="alt_report_notification_subject">Delivery of issue report.</string>
+    <string name="alt_report_notification_success_upload_message">Issue report was sent successfully.</string>
+    <string name="alt_report_notification_failed_upload_message">Issue report sending was failed.</string>
+    
+    <!-- Issue report window -->
+    <string name="alt_crash_header_message">Unfortunately, application has stoped.</string>
+    <string name="alt_issue_report_header_message">Report about problem.</string>
+    <string name="alt_toast_message_could_be_empty">Issue message could not be empty. Please, input some description of issue.</string>
+   	<string name="alt_crash_message">Unfortunately in application fatal error occurred. You can send report of error for fixing this issue in future. Would you like send issue report?</string>
+	<string name="alt_crash_notification">Unfortunately in application fatal error occurred.</string>
+	<string name="alt_issue_message">If in application some error,lagging etc. occurred you can notify about it. Would you like send issue report?</string>
+	<string name="alt_describe_issue">Please, describe issue.</string>
+	<string name="alt_thanks_for_report">Thanks, for issue notification!</string>
+</resources>

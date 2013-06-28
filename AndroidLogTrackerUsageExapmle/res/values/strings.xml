@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">LogLibrarryUsage</string>
+    <string name="start_send_messages">Start sending log messages</string>
+    <string name="stop_send_messages">Stop sending log messages</string>
+</resources>
