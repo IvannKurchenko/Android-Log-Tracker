@@ -127,14 +127,14 @@ At this moment library supports sending prepared bug reports by e-mail. For send
 <pre><code>LogSettings settings = LogSettings.newDebugSettings(this);
 EmailLogSendingSettings emailLogSendingSettings = new EmailLogSendingSettings("your.email@gmail.com" , "password", “report.recipient@gmail.com");
 emailLogSendingSettings.addEmailRecipient("another@email.com");
-emailLogSendingSettings.
 settings.setSendingSettings(emailLogSendingSettings);
 </code></pre>
 
-By default library support “GMAIL”  host, for other email host need to set host address in EmailLogSendingSettings . 
+By default library support “GMAIL”  host, for other email host need to set host address in 
+<code>setEmailHost(String emailHost)</code>. 
 
 ##Languages support
-Ay this moment library support only English, Russian and Ukrainian languages.
+At this moment library support only English, Russian and Ukrainian languages.
 
 ##Require permissions
 Using of library required next permissions for your application , depending of logging settings.
