@@ -116,10 +116,16 @@ After this you could use as usual, for example: <code>Log.i(TAG,”Message”)</
 
 **Note:** now it's need to import <code>com.logtracking.lib.api.Log</code> , instead of <code>android.util.Log</code>!
 
+For more details, you can see “AndroidLogTrackerUsageExapmle” demo application and javadoc for main API classes :  <code>LogSettings, LogContext, MetaDataCollector, OnCrashHandledListener, Log, LogUtils</code>.
+
+##Bug report dialog
 For showing “bug report dialog”, you need to invoke :
 <pre><code> ReportIssueDialog.show(); </code></pre>
-
-For more details, you can see “AndroidLogTrackerUsageExapmle” demo application and javadoc for main API classes :  <code>LogSettings, LogContext, MetaDataCollector, OnCrashHandledListener, Log, LogUtils</code>.
+Screenshot examples of bug report dialogs : 
+![Alt text](http://s24.postimg.org/bhsj72jgl/Untitled.png)
+<br>1. Simple bug report dialog, showed by invoking <pre><code> ReportIssueDialog.show(); </code></pre>
+2. Crash report dialog,when sending settings provided
+<br>3. Crash report dialog,without sending settings
 
 ##Bug report sending
 At this moment library supports sending prepared bug reports by e-mail. For sending bug reports on your e-mail, you need to create and configure  EmailLogSendingSettings as was showed previously : 
