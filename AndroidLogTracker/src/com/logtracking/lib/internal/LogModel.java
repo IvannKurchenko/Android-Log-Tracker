@@ -24,16 +24,13 @@ public class LogModel {
         mDate = LOG_DATE_FORMAT.format(CALENDAR.getTime());
 	}
 
-    /**
-     * Constructor special for making log record from error trace element.
-     */
-	public LogModel(int pid, String packageName , long threadId, String message){
+	public LogModel(int pid, long tid, int level, String packageName ,String tag,  String message){
 		mDate = LOG_DATE_FORMAT.format(CALENDAR.getTime());
-		mLevelSymbol = LogFilter.getLevelSymbolByCode(Log.ERROR);
-		mTid = threadId;
-		mPid = pid;
+        mPid = pid;
+		mTid = tid;
+        mLevelSymbol = LogFilter.getLevelSymbolByCode(level);
 		mPackageName = packageName;
-		mTag = "System.err";
+		mTag = tag;
 		mMessage = message;
         buildLogRecord();
 	}

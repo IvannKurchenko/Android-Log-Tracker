@@ -23,7 +23,8 @@ public class LogFileManager {
 	private static final String FILE_NAME_SEPARATOR = System.getProperty("file.separator");
 	protected static final String REPORT_DIRECTORY_NAME = "reports";
 	private static final String REPORT_FILE_NAME = "report";
-	
+	private static final String SYSTEM_TAG = "System.err";
+
 	/**
 	 * Should be called only from UI thread!
 	 */
@@ -149,7 +150,7 @@ public class LogFileManager {
 		int pid = mLogFilter.getPidByPackageName(packageName);
 
         for (String crashStackTraceItem : crashStackTrace) {
-            crashList.add(new LogModel(pid, packageName, thread.getId(), crashStackTraceItem));
+            crashList.add(new LogModel(pid, thread.getId(), Log.ERROR,packageName, SYSTEM_TAG, crashStackTraceItem));
         }
 		saveLogDump(crashList,BaseLogTask.CRASH_REPORT_MESSAGE,onReportPrepareListener);
 	}
