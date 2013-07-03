@@ -107,7 +107,6 @@ public final class LogSettings {
 	 * File settings
 	 */
 	private LogSavingMode mLogSavingMode;
-	private boolean mSaveInFileMetaData;
 	private List<String> mApplicationPackageFilter = new ArrayList<String>();
 	private List<String> mTagFilter = new ArrayList<String>();
 	private int mLevelFilter;
@@ -167,7 +166,6 @@ public final class LogSettings {
 		
 		debugSettings.mLoggingAvailable = true;
 		debugSettings.mLogSavingMode = LogSavingMode.SAVE_ALL_LOG_IN_FILE;
-		debugSettings.mSaveInFileMetaData = true;
 		
 		debugSettings.setDefaultApplicationPackageFilter();
 		
@@ -205,7 +203,6 @@ public final class LogSettings {
 		
 		productionSettings.mLoggingAvailable = false;
 		productionSettings.mLogSavingMode = LogSavingMode.SAVE_ONLY_IF_NEEDED;
-		productionSettings.mSaveInFileMetaData = true;
 		productionSettings.mFilterOnlyOwnLogRecord = true;
 		
 		productionSettings.setSendReportOnlyByWifi(true);
@@ -243,20 +240,7 @@ public final class LogSettings {
 	public LogSavingMode getLogSavingMode(){
 		return mLogSavingMode;
 	}
-	
-	/**
-	 * Turn on or off saving of meta-data in log-file.
-     *
-	 * @see com.logtracking.lib.api.MetaDataCollector
-	 */
-	public void setSaveMetaDataInFile(boolean saveInFileMetaData){
-		this.mSaveInFileMetaData = saveInFileMetaData;
-	}
-	
-	public boolean isSaveMetaDataInFile(){
-		return mSaveInFileMetaData;
-	}
-	
+
 	/**
 	 * Add package to filter of messages saved in file.
 	 * 

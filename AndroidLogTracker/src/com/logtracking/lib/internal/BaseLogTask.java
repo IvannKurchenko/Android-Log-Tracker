@@ -144,7 +144,7 @@ public abstract class BaseLogTask extends AsyncTask <Void,Void,File> {
 	}
 	
 	private void writeMetaData() throws IOException{
-		if (mSettings.isSaveMetaDataInFile() && mMetaDataCollector!= null && !mMetaDataCollector.isEmpty()){
+		if (mMetaDataCollector!= null && !mMetaDataCollector.isEmpty()){
 			writeLineToFile(mFileFormatter.getMetaDataOpenTag());
 			writeLineToFile(mFileFormatter.formatMetaData(mMetaDataCollector.getData()));
 			writeLineToFile(mFileFormatter.getMetaDataCloseTag());
