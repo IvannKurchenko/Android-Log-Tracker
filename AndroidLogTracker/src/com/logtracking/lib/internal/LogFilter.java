@@ -17,12 +17,12 @@ public class LogFilter {
 	private static final SparseArray<Character> CODE_LEVEL_ARRAY = new SparseArray<Character>();
 	
 	static {
-		CODE_LEVEL_ARRAY.put(android.util.Log.ASSERT ,  'A');
-		CODE_LEVEL_ARRAY.put(android.util.Log.DEBUG  ,  'D');
-		CODE_LEVEL_ARRAY.put(android.util.Log.ERROR  ,  'E');
-		CODE_LEVEL_ARRAY.put(android.util.Log.INFO   ,  'I');
-		CODE_LEVEL_ARRAY.put(android.util.Log.VERBOSE , 'V');
-		CODE_LEVEL_ARRAY.put(android.util.Log.WARN  ,   'W');
+		CODE_LEVEL_ARRAY.put(Log.ASSERT ,  'A');
+		CODE_LEVEL_ARRAY.put(Log.DEBUG  ,  'D');
+		CODE_LEVEL_ARRAY.put(Log.ERROR  ,  'E');
+		CODE_LEVEL_ARRAY.put(Log.INFO   ,  'I');
+		CODE_LEVEL_ARRAY.put(Log.VERBOSE,  'V');
+		CODE_LEVEL_ARRAY.put(Log.WARN   ,  'W');
 	}
 	
 	private static final LogFilter instance = new LogFilter();
