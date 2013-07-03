@@ -1,7 +1,6 @@
 package  com.androidlogtracker.tests.format;
 
 import android.text.TextUtils;
-import com.androidlogtracker.tests.util.FakeMetaDataCollector;
 import com.androidlogtracker.tests.util.TestDocument;
 import com.logtracking.lib.api.MetaDataCollector;
 import com.logtracking.lib.internal.LogModel;
@@ -97,7 +96,7 @@ public class NativeLogFileFormatterTest extends AbstractFormatterTest {
                                                                     mFormatter.getMetaDataCloseTag());
 
 
-        MetaDataCollector metaDataCollector = new FakeMetaDataCollector();
+        MetaDataCollector metaDataCollector = new MetaDataCollector();
         String[] metaDataList = metaData.split(LINE_SEPARATOR);
 
         for (String metaDataPair : metaDataList) {

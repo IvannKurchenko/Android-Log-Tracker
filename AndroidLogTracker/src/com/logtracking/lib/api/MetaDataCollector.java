@@ -22,133 +22,127 @@ import android.view.WindowManager;
  * Class that provide possibility of storing meta-data about device, system, application etc in key-value form.
  * Collected meta-data will be saved in log file.
  */
-public class MetaDataCollector {
+public final class MetaDataCollector {
 		
 	/**
 	 * The name of the industrial device design.
 	 */
-	public static final String DEVICE_NAME_KEY = "device_name";
+	private static final String DEVICE_NAME_KEY = "device_name";
 	
 	/**
 	 * The end-user-visible name for the end product.
 	 */
-	public static final String DEVICE_MODEL_KEY = "device_model";
+    private static final String DEVICE_MODEL_KEY = "device_model";
 	
 	/**
 	 * The name of the hardware (from the kernel command line or /proc).
 	 */
-	public static final String DEVICE_HARDWARE_INFO_KEY = "device_hardware_info";
+    private static final String DEVICE_HARDWARE_INFO_KEY = "device_hardware_info";
 	
 	/**
 	 * The user-visible SDK version of the framework
 	 */
-	public static final String DEVICE_OS_SDK_LEVEL_KEY = "device_os_sdk_level";
+    private static final String DEVICE_OS_SDK_LEVEL_KEY = "device_os_sdk_level";
 	
 	/**
 	 * Comma-separated tags describing the build, like "unsigned,debug".
 	 */
-	public static final String DEVISE_OS_TAGS_INFO_KEY = "device_os_info";
+    private static final String DEVISE_OS_TAGS_INFO_KEY = "device_os_info";
 	
 	/**
 	 * Default device locale .
 	 */
-	public static final String DEVICE_LOCALE_KEY = "device_locale";
+    private static final String DEVICE_LOCALE_KEY = "device_locale";
 	
 	/**
 	 * Default device timezone.
 	 */
-	public static final String DEVICE_TIMEZONE_KEY = "device_timezone";
+    private static final String DEVICE_TIMEZONE_KEY = "device_timezone";
 	
 	/**
 	 * The available memory on the system.
 	 */
-	public static final String DEVICE_SYSTEM_MEMORY_STATE_KEY = "device_system_memory_state";
+    private static final String DEVICE_SYSTEM_MEMORY_STATE_KEY = "device_system_memory_state";
 	
 	/**
 	 * The external available memory.
 	 */
-	public static final String DEVICE_SD_CARD_MEMORY_STATE_KEY = "device_sd_card_memmory_state";
+    private static final String DEVICE_SD_CARD_MEMORY_STATE_KEY = "device_sd_card_memory_state";
 	
 	/**
 	 * Memory class for application.
 	 */
-	public static final String DEVICE_OPERATING_MEMORY_CLASS_KEY = "device_operating_memory_class";
+    private static final String DEVICE_OPERATING_MEMORY_CLASS_KEY = "device_operating_memory_class";
 
     /**
      * Memory class for application that use large heap size.
      */
-    public static final String DEVICE_OPERATING_LARGE_MEMORY_CLASS_KEY = "device_operating_large_memory_class";
+    private static final String DEVICE_OPERATING_LARGE_MEMORY_CLASS_KEY = "device_operating_large_memory_class";
 
 	
 	/**
 	 * Device screen size in pixels.
 	 */
-	public static final String DEVICE_SCREEN_SIZE_KEY = "screen_size_density";
+    private static final String DEVICE_SCREEN_SIZE_KEY = "screen_size_density";
 	
 	/**
 	 * Device screen density.
 	 */
-	public static final String DEVICE_SCREEN_DENSITY_KEY = "device_screen_density_key";
+    private static final String DEVICE_SCREEN_DENSITY_KEY = "device_screen_density_key";
 	
 	/**
 	 * Name of current application.
 	 */
-	public static final String APP_NAME_KEY = "app_name";
+    private static final String APP_NAME_KEY = "app_name";
 	
 	/**
 	 * Version number of current application.
 	 */
-	public static final String APP_VERSION_NUMBER_KEY = "app_version_number";
+    private static final String APP_VERSION_NUMBER_KEY = "app_version_number";
 	
 	/**
 	 * Version name of current application.
 	 */
-	public static final String APP_VERSION_NAME_KEY = "app_version_name";
+    private static final String APP_VERSION_NAME_KEY = "app_version_name";
 	
 	/**
 	 * Time of first install of current application
 	 */
-	public static final String APP_FIRST_TIME_INSTALLED_KEY = "app_first_time_installed";
+    private static final String APP_FIRST_TIME_INSTALLED_KEY = "app_first_time_installed";
 	
 	/**
 	 * Time of last update of current application
 	 */
-	public static final String APP_LAST_TIME_UPDATED_KEY = "app_last_time_updated";
+    private static final String APP_LAST_TIME_UPDATED_KEY = "app_last_time_updated";
 	
 	/**
 	 * Current application package.
 	 */
-	public static final String APP_PACKAGE_NAME_KEY = "app_package_name";
-	
-	
-	private Context context;
-	
+    private static final String APP_PACKAGE_NAME_KEY = "app_package_name";
+
 	private Map<String,String> metaDataMap;
-	
-	/**
-	 * @param context - application context
-	 * @param collectDefaultInfo - need collect default meta-data
-	 */
-	public MetaDataCollector(Context context , boolean collectDefaultInfo) {
-		this.context = context;
+
+    /**
+     * Constructs object without any met-data
+     */
+    public MetaDataCollector(){
+        metaDataMap = new HashMap<String,String>();
+    }
+
+    /**
+     * Constructs object with collected default meta-data.
+     *
+     * @param context - application context
+     */
+	public MetaDataCollector(Context context) {
 		metaDataMap = new HashMap<String,String>();
-		if(collectDefaultInfo){
-			collectDefaultInfo();
-		}
+		collectDefaultInfo(context);
 	}
-	
-	/**
-	 * Constructs object with collected default meta-data 
-	 * @param context - application context
-	 */
-	public MetaDataCollector(Context context){
-		this(context ,true);
-	}
-	
+
 	/**
 	 * Collect all info described in class keys. 
 	 */
-	private void collectDefaultInfo(){
+	private void collectDefaultInfo(Context context){
 		
 		metaDataMap.put(DEVICE_NAME_KEY, android.os.Build.DEVICE);
 		metaDataMap.put(DEVICE_MODEL_KEY, android.os.Build.MODEL);
@@ -216,21 +210,6 @@ public class MetaDataCollector {
 	 */
 	public Map<String,String> getData(){
 		return new HashMap<String, String>(metaDataMap);
-	}
-	
-	/**
-	 * Remove meta value by key
-	 * @param key of meta
-	 */
-	public void remove(String key){
-		metaDataMap.remove(key);
-	}
-	
-	/**
-	 * Clear all meta-data.
-	 */
-	public void clearAll(){
-		metaDataMap.clear();
 	}
 	
 	/**
