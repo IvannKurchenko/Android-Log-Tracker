@@ -9,7 +9,7 @@ import java.util.List;
  *  Default supported e-mail server is GMAIL, for supporting other servers for sending , you should
  *  set correct "e-mail host" parameter for server you use.
  */
-public class EmailLogSendingSettings implements LogSendingSettings {
+public final class EmailLogSendingSettings implements LogSendingSettings {
 
 	private static final String DEFAULT_MAIL_SUBJECT = "Android Logtracking Library : Bug report";
 	
