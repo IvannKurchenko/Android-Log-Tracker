@@ -10,6 +10,7 @@ import java.util.*;
 
 import static com.logtracking.lib.api.Log.*;
 import static com.logtracking.lib.api.settings.NonModifiableCollections.newNonModifiableList;
+import static com.logtracking.lib.api.settings.NonModifiableCollections.newNonModifiableMap;
 
 /**
  * Class representing global configuration of logging, creating and formatting issue reports,strategies of crash handling, etc.
@@ -109,8 +110,8 @@ public final class LogConfiguration {
             return productionSettings;
         }
 
-        private static void checkNotNull(Object obj){
-            if(obj == null) {
+        private static void checkNotNull(Object object){
+            if(object == null) {
                 throw new NullPointerException();
             }
         }
@@ -152,12 +153,15 @@ public final class LogConfiguration {
         private long mLogFileRotationTime;
         private List<String> mFilesAttachedToReport = new ArrayList<String>();
 
-        private MetaDataCollector mMetaDataCollector;
-
         /*
          * Sending config
          */
         private LogSendingSettings mSendingSettings;
+
+        /*
+         * Additional
+         */
+        private Map<String,String> mMetaData;
 
         private String mApplicationPackage;
 
@@ -169,7 +173,7 @@ public final class LogConfiguration {
             mLogDirectoryName = appDir.getPath()  + FILE_NAME_SEPARATOR + LOG_FILES_DIRECTORY;
             mLogFileFormat = LogFileFormat.DEFAULT;
             mApplicationPackage = applicationContext.getPackageName();
-            mMetaDataCollector = new MetaDataCollector(applicationContext);
+            mMetaData = new MetaDataCollector(applicationContext).getData();
         }
 
         /**
@@ -385,6 +389,19 @@ public final class LogConfiguration {
             return this;
         }
 
+
+        /**
+         * Put new meta-data in key-value format that will be saved in issue report.
+         *
+         * @param key meta-data key
+         * @param value meta-data value
+         * @throws IllegalArgumentException if meta-data key will be empty.
+         */
+        public void putMetaData(String key,String value){
+            checkEmpty(key,"Meta-data key shouldn't be null");
+            mMetaData.put(key, value != null ? value : "");
+        }
+
         /**
          * Builds instance of {@link LogConfiguration}.
          * @return new  configured instance {@link LogConfiguration}.
@@ -500,6 +517,11 @@ public final class LogConfiguration {
      */
     private final LogSendingSettings mSendingSettings;
 
+    /*
+     * Additional
+     */
+    private final Map<String,String> mMetaData;
+
     private LogConfiguration(LogConfigurationBuilder builder){
         mLoggingAvailable = builder.mLoggingAvailable;
         mSendReportOnlyByWifi = builder.mSendReportOnlyByWifi;
@@ -520,6 +542,8 @@ public final class LogConfiguration {
         mFilesAttachedToReport = newNonModifiableList(builder.mFilesAttachedToReport);
 
         mSendingSettings = builder.mSendingSettings;
+
+        mMetaData = newNonModifiableMap(builder.mMetaData);
     }
 
     public boolean isLoggingAvailable(){
@@ -584,5 +608,9 @@ public final class LogConfiguration {
 
     public LogSendingSettings getSendingSettings(){
         return mSendingSettings;
+    }
+
+    public Map<String,String> getMetaData(){
+        return mMetaData;
     }
 }

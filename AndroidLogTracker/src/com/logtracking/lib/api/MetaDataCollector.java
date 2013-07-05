@@ -143,7 +143,6 @@ public final class MetaDataCollector {
 	 * Collect all info described in class keys. 
 	 */
 	private void collectDefaultInfo(Context context){
-		
 		metaDataMap.put(DEVICE_NAME_KEY, android.os.Build.DEVICE);
 		metaDataMap.put(DEVICE_MODEL_KEY, android.os.Build.MODEL);
 		metaDataMap.put(DEVICE_HARDWARE_INFO_KEY, android.os.Build.HARDWARE);
