@@ -8,7 +8,7 @@ public class NonModifiableCollections {
         return new NonModifiableArrayList<T>(content);
     }
 
-    public static <K,V> Map<K,V> newNonModifiableList(Map<K,V> content){
+    public static <K,V> Map<K,V> newNonModifiableMap(Map<K,V> content){
         return new NonModifiableHashMap<K,V>(content);
     }
 
