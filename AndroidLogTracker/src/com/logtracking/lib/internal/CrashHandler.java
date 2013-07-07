@@ -2,8 +2,7 @@ package com.logtracking.lib.internal;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 
-import com.logtracking.lib.api.LogContext;
-import com.logtracking.lib.api.settings.LogSettings;
+import com.logtracking.lib.api.config.LogConfiguration;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -15,14 +14,14 @@ public class CrashHandler implements UncaughtExceptionHandler {
 	
 	private UncaughtExceptionHandler mDefaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
 	private IssueReporter mIssueReporter;
-	private LogSettings mLogSettings; 
+	private LogConfiguration mLogConfiguration;
 	
 	private Thread mCrashedThread;
 	private Throwable mUncaughtException;
 	private Handler mUiHandler;
 	
 	public CrashHandler(LogContext logContext, IssueReporter issueReporter) {
-		mLogSettings = logContext.getLogSettings();
+		mLogConfiguration = logContext.getLogConfiguration();
 		mIssueReporter = issueReporter;	
 		mUiHandler = new Handler(Looper.getMainLooper());
 	}
@@ -62,7 +61,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 	}
 	
 	private void printStackTrace(){
-		if (mLogSettings.isLoggingAvailable()){
+		if (mLogConfiguration.isLoggingAvailable()){
             mUncaughtException.printStackTrace();
 		}
 	}

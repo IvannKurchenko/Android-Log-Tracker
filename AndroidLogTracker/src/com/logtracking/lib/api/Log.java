@@ -1,12 +1,8 @@
 package com.logtracking.lib.api;
 
-import com.logtracking.lib.api.settings.LogSettings;
-import com.logtracking.lib.api.settings.LogSettings.LogSavingMode;
-import com.logtracking.lib.internal.CrashHandler;
-import com.logtracking.lib.internal.IssueReporter;
-import com.logtracking.lib.internal.LogFileManager;
-import com.logtracking.lib.internal.LogFilter;
-import com.logtracking.lib.internal.StateHolder;
+import android.content.Context;
+import com.logtracking.lib.api.config.LogConfiguration;
+import com.logtracking.lib.internal.*;
 
 import android.text.TextUtils;
 
@@ -14,7 +10,7 @@ import android.text.TextUtils;
  * A wrapper class over android.util.Log class with additional functionality.
  * Before use should be initialized using init() method.
  *
- * @see LogContext
+ * @see com.logtracking.lib.internal.LogContext
  * @see LogUtils
  */
 
@@ -54,7 +50,7 @@ public final class Log {
 	
     private static final String[] EMPTY_LOCATION = {"",""};
 	
-	private static LogSettings sLogSettings;
+	private static LogConfiguration sLogConfiguration;
 	
 	/**
 	 * Cannot be instantiated
@@ -63,14 +59,18 @@ public final class Log {
 	}
 
 	/**
-	 * Initialize log with given {@link LogContext}.
+	 * Initialize log with given {@link LogConfiguration} and {@link Context}.
      *
-	 * @param logContext log context
+     * @see LogConfiguration
+	 * @param logConfiguration logging configuration
+     * @param applicationContext application context
 	 */
-	public static void init(LogContext logContext){
-		if ( sLogSettings == null ){
+	public static void init(LogConfiguration logConfiguration,Context applicationContext){
+		if ( sLogConfiguration == null ){
 
-			sLogSettings = logContext.getLogSettings();
+			sLogConfiguration = logConfiguration;
+
+            LogContext logContext = new LogContext(logConfiguration,applicationContext);
 
 			LogFilter.getInstance().initFilter(logContext);
 			
@@ -95,7 +95,7 @@ public final class Log {
      * @param msg The message you would like logged.
      */
 	public static int d(String tag, String msg){
-		return sLogSettings.isLoggingAvailable() ? android.util.Log.d(LIBRARY_FILTER_TAG + tag , msg) : -1;
+		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.d(LIBRARY_FILTER_TAG + tag , msg) : -1;
 	}
 	
 	/**
@@ -107,7 +107,7 @@ public final class Log {
      */
 	
 	public static int d(String tag, String msg ,Throwable tr){
-		return sLogSettings.isLoggingAvailable() ? android.util.Log.d(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
+		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.d(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
 	}
 	
 	/**
@@ -117,7 +117,7 @@ public final class Log {
      * @param msg The message you would like logged.
      */
 	public static int e(String tag, String msg ){
-		return sLogSettings.isLoggingAvailable() ? android.util.Log.e(LIBRARY_FILTER_TAG + tag , msg ) : -1;
+		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.e(LIBRARY_FILTER_TAG + tag , msg ) : -1;
 	}
 	
 	/**
@@ -128,7 +128,7 @@ public final class Log {
      * @param tr An exception to log
      */
 	public static int e(String tag, String msg ,Throwable tr){
-		return sLogSettings.isLoggingAvailable() ? android.util.Log.e(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
+		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.e(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
 	}
 	
 	/**
@@ -138,7 +138,7 @@ public final class Log {
      * @param msg The message you would like logged.
      */
 	public static int i(String tag, String msg ){
-		return sLogSettings.isLoggingAvailable() ? android.util.Log.i(LIBRARY_FILTER_TAG + tag , msg ) : -1;
+		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.i(LIBRARY_FILTER_TAG + tag , msg ) : -1;
 	}
 	
 	/**
@@ -149,7 +149,7 @@ public final class Log {
      * @param tr An exception to log
      */
 	public static int i(String tag, String msg ,Throwable tr){
-		return sLogSettings.isLoggingAvailable() ? android.util.Log.i(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
+		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.i(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
 	}
 	
 	/**
@@ -161,7 +161,7 @@ public final class Log {
      */
 	
 	public static int v(String tag, String msg ){
-		return sLogSettings.isLoggingAvailable() ? android.util.Log.v(LIBRARY_FILTER_TAG + tag , msg ) : -1;
+		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.v(LIBRARY_FILTER_TAG + tag , msg ) : -1;
 	}
 	
 	/**
@@ -172,7 +172,7 @@ public final class Log {
      * @param tr An exception to log
      */
 	public static int v(String tag, String msg ,Throwable tr){
-		return sLogSettings.isLoggingAvailable() ? android.util.Log.v(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
+		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.v(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
 	}
 
 	 /**
@@ -182,7 +182,7 @@ public final class Log {
      * @param msg The message you would like logged.
      */
 	public static int w(String tag, String msg ){
-		return sLogSettings.isLoggingAvailable() ? android.util.Log.w(LIBRARY_FILTER_TAG + tag , msg ) : -1;
+		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.w(LIBRARY_FILTER_TAG + tag , msg ) : -1;
 	}
 
     /**
@@ -192,7 +192,7 @@ public final class Log {
      * @param tr An exception to log
      */
 	public static int w(String tag,Throwable tr){
-		return sLogSettings.isLoggingAvailable() ? android.util.Log.w(LIBRARY_FILTER_TAG + tag , tr) : -1;
+		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.w(LIBRARY_FILTER_TAG + tag , tr) : -1;
 	}
 	
 	/**
@@ -203,7 +203,7 @@ public final class Log {
      * @param tr An exception to log
      */
 	public static int w(String tag, String msg ,Throwable tr){
-		return sLogSettings.isLoggingAvailable() ? android.util.Log.w(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
+		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.w(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
 	}
 
 
@@ -218,7 +218,7 @@ public final class Log {
      * @param msg The message you would like logged.
      */
 	public static int wtf(String tag, String msg ){
-		return sLogSettings.isLoggingAvailable() ? android.util.Log.wtf(LIBRARY_FILTER_TAG + tag , msg ) : -1;
+		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.wtf(LIBRARY_FILTER_TAG + tag , msg ) : -1;
 	}
 
     /**
@@ -229,7 +229,7 @@ public final class Log {
      * @param tr An exception to log.
      */
 	public static int wtf(String tag,Throwable tr){
-		return sLogSettings.isLoggingAvailable() ? android.util.Log.wtf(LIBRARY_FILTER_TAG + tag , tr) : -1;
+		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.wtf(LIBRARY_FILTER_TAG + tag , tr) : -1;
 	}
 
     /**
@@ -241,7 +241,7 @@ public final class Log {
      * @param tr An exception to log.  May be null.
      */
 	public static int wtf(String tag, String msg ,Throwable tr){
-		return sLogSettings.isLoggingAvailable() ? android.util.Log.wtf(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
+		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.wtf(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
 	}
 	
 	/**
@@ -253,7 +253,7 @@ public final class Log {
      * @return The number of bytes written.
      */
 	public static int println(int priority,String tag, String msg){
-		return sLogSettings.isLoggingAvailable() ? android.util.Log.println(priority, tag, msg) : -1;
+		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.println(priority, tag, msg) : -1;
 	}
 	
 	 /**
@@ -276,7 +276,7 @@ public final class Log {
      * @throws IllegalArgumentException is thrown if the tag.length() > 23.
      */
 	public static boolean isLoggable(String tag , int level){
-		return sLogSettings.isLoggingAvailable() && android.util.Log.isLoggable(tag, level);
+		return sLogConfiguration.isLoggingAvailable() && android.util.Log.isLoggable(tag, level);
 	}
 	
 	 /**
@@ -474,7 +474,7 @@ public final class Log {
 	 * @return array of two elements - first - class name , second - method name and code line number 
 	 */
 	private static String[] getLocation() {
-		if(!sLogSettings.isLoggingAvailable())
+		if(!sLogConfiguration.isLoggingAvailable())
 			return EMPTY_LOCATION;
 		
 		String[] location = {LIBRARY_FILTER_TAG,""};

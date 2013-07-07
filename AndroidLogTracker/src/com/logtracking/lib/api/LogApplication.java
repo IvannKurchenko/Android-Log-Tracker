@@ -1,15 +1,16 @@
 package com.logtracking.lib.api;
 
 import android.app.Application;
+import com.logtracking.lib.api.config.LogConfiguration;
 
 /**
- *	Class for using default log settings.
+ *	Class for using default log config.
  */
 public class LogApplication  extends Application{
 	@Override
 	public void onCreate() {
 		super.onCreate();
-        LogContext.LogContextBuilder builder = new LogContext.LogContextBuilder(this);
-		Log.init(builder.build());
+        LogConfiguration logConfiguration = LogConfiguration.LogConfigurationBuilder.newDebugConfiguration(this).build();
+        Log.init(logConfiguration,this);
 	}
 }

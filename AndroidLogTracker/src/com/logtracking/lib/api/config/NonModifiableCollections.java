@@ -1,4 +1,4 @@
-package com.logtracking.lib.api.settings;
+package com.logtracking.lib.api.config;
 
 import java.util.*;
 

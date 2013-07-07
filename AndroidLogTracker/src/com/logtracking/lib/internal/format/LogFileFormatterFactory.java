@@ -1,11 +1,12 @@
 package com.logtracking.lib.internal.format;
 
-import com.logtracking.lib.api.settings.LogSettings;
+
+import com.logtracking.lib.api.config.LogConfiguration;
 
 public class LogFileFormatterFactory {
 
-	public static LogFileFormatter getFormatter(LogSettings settings){
-		switch(settings.getLogFileFormat()){
+	public static LogFileFormatter getFormatter(LogConfiguration configuration){
+		switch(configuration.getLogFileFormat()){
 			case DEFAULT:
 				return new NativeLogFileFormatter();
 				

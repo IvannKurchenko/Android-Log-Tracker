@@ -1,10 +1,13 @@
 package com.androidlogtracker.tests;
 
+import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import com.androidlogtracker.tests.util.FakeIssueReporter;
 import com.androidlogtracker.usage.TestActivity;
 import com.logtracking.lib.api.Log;
-import com.logtracking.lib.api.LogContext;
+import com.logtracking.lib.api.config.LogConfiguration;
+import com.logtracking.lib.api.config.LogConfiguration.LogConfigurationBuilder;
+import com.logtracking.lib.internal.LogContext;
 import com.logtracking.lib.internal.CrashHandler;
 
 import java.util.concurrent.locks.Lock;
@@ -20,7 +23,9 @@ public class CrashHandlerTest extends ActivityInstrumentationTestCase2<TestActiv
     }
 
     public void setUp(){
-        LogContext logContext = new LogContext.LogContextBuilder(getActivity()).build();
+        Context context = getActivity();
+        LogConfiguration logConfiguration = LogConfigurationBuilder.newDebugConfiguration(context).build();
+        LogContext logContext = new LogContext(logConfiguration,context);
         mFakeIssueReporter  = new FakeIssueReporter(logContext);
         mCrashHandler = new CrashHandler(logContext,mFakeIssueReporter);
     }

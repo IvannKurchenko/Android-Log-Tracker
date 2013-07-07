@@ -1,4 +1,4 @@
-package com.logtracking.lib.api;
+package com.logtracking.lib.api.config;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,11 +18,7 @@ import android.os.StatFs;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
-/**
- * Class that provide possibility of storing meta-data about device, system, application etc in key-value form.
- * Collected meta-data will be saved in log file.
- */
-public final class MetaDataCollector {
+class MetaDataCollector {
 		
 	/**
 	 * The name of the industrial device design.
@@ -123,13 +119,6 @@ public final class MetaDataCollector {
 	private Map<String,String> metaDataMap;
 
     /**
-     * Constructs object without any met-data
-     */
-    public MetaDataCollector(){
-        metaDataMap = new HashMap<String,String>();
-    }
-
-    /**
      * Constructs object with collected default meta-data.
      *
      * @param context - application context
@@ -194,27 +183,10 @@ public final class MetaDataCollector {
 	}
 	
 	/**
-	 * Add new meta-data
-	 * 
-	 * @param key of meta-data
-	 * @param value of meta-data
-	 */
-	public void put(String key , String value){
-		metaDataMap.put(key, value);
-	}
-	
-	/**
 	 * Return copy of meta-data
 	 * @return Map<String,String> of key-value pairs of meta-data
 	 */
 	public Map<String,String> getData(){
 		return new HashMap<String, String>(metaDataMap);
-	}
-	
-	/**
-	 * @return true if there is no any meta-data
-	 */
-	public boolean isEmpty(){
-		return metaDataMap.isEmpty();
 	}
 }

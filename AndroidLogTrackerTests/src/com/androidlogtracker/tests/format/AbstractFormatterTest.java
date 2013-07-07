@@ -2,11 +2,11 @@ package com.androidlogtracker.tests.format;
 
 import android.test.AndroidTestCase;
 import com.androidlogtracker.tests.util.TestDocument;
-import com.logtracking.lib.api.MetaDataCollector;
 import com.logtracking.lib.internal.LogModel;
 import com.logtracking.lib.internal.format.LogFileFormatter;
 
 import java.util.List;
+import java.util.Map;
 
 import static  com.androidlogtracker.tests.util.TestLogDataProvider.*;
 import static  com.androidlogtracker.tests.util.TestMetaDataProvider.*;
@@ -79,7 +79,7 @@ public abstract class AbstractFormatterTest extends AndroidTestCase implements F
                                 generateLogRecordsWithControlSymbols(DEFAULT_LOG_RECORDS_COUNT,controlSymbols) );
     }
 
-    protected TestDocument formatDocument(String message , MetaDataCollector metaData , List<LogModel> records){
+    protected TestDocument formatDocument(String message , Map<String,String> metaData , List<LogModel> records){
         StringBuilder builder = new StringBuilder();
         builder.append(mFormatter.getDocumentOpenTag());
         builder.append('\n');
@@ -92,7 +92,7 @@ public abstract class AbstractFormatterTest extends AndroidTestCase implements F
         if(metaData != null){
             builder.append(mFormatter.getMetaDataOpenTag());
             builder.append('\n');
-            builder.append(mFormatter.formatMetaData(metaData.getData()));
+            builder.append(mFormatter.formatMetaData(metaData));
             builder.append(mFormatter.getMetaDataCloseTag());
             builder.append('\n');
         }

@@ -1,15 +1,15 @@
-package com.logtracking.lib.api.settings;
+package com.logtracking.lib.api.config;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- *  Class represents settings of sending issue report by e-mail.
+ *  Class represents config of sending issue report by e-mail.
  *  Default supported e-mail server is GMAIL, for supporting other servers for sending , you should
  *  set correct "e-mail host" parameter for server you use.
  */
-public final class EmailLogSendingSettings implements LogSendingSettings {
+public final class EmailLogSendingConfiguration implements LogSendingConfiguration {
 
 	private static final String DEFAULT_MAIL_SUBJECT = "Android Logtracking Library : Bug report";
 	
@@ -26,7 +26,7 @@ public final class EmailLogSendingSettings implements LogSendingSettings {
      * @param pass  pass to account of email from log-file should be send
      * @param emailRecipients email addresses for sending bug reports
      */
-    public EmailLogSendingSettings(String emailAddress, String pass, String... emailRecipients){
+    public EmailLogSendingConfiguration(String emailAddress, String pass, String... emailRecipients){
         mEmailUserAddress = emailAddress;
         mEmailUserPass = pass;
         mEmailRecipients = new ArrayList<String>(Arrays.asList(emailRecipients));

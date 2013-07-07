@@ -8,10 +8,7 @@ import java.text.ParseException;
 import java.util.List;
 
 import com.logtracking.lib.api.Log;
-import com.logtracking.lib.api.settings.LogSettings;
-import com.logtracking.lib.api.MetaDataCollector;
-
-import android.content.Context;
+import com.logtracking.lib.api.config.LogConfiguration;
 
 import static com.logtracking.lib.internal.LogProvider.*;
 
@@ -27,11 +24,11 @@ class LogSavingTask extends BaseLogTask {
 	private volatile boolean mCanWriteInFile;
 	private boolean  mSaveDump;
 	
-	public LogSavingTask(Context applicationContext , MetaDataCollector metaDataCollector, LogSettings settings) {
-		super(applicationContext,metaDataCollector,settings);
+	public LogSavingTask(LogContext logContext) {
+		super(logContext);
 		mLogParser = new LogParser();
 		mBuffer = new StringBuffer();
-		mLogFile = new File(mSettings.getLogFileName() + mFileFormatter.getFileExtension());
+		mLogFile = new File(mLogConfiguration.getLogFileName() + mFileFormatter.getFileExtension());
 		mLogFilter = LogFilter.getInstance();
 		mCanWriteInFile = true;
 	}
@@ -135,14 +132,14 @@ class LogSavingTask extends BaseLogTask {
         arguments.append(FORMAT);
         arguments.append(THREADTIME_FORMAT);
 
-        if(mSettings.getTagFilter().size()>0) {
+        if(mLogConfiguration.getTagFilter().size()>0) {
 
            arguments.append(SET_DEFAULT_FILTER);
 
-           char level = LogFilter.getLevelSymbolByCode(mSettings.getLevelFilter());
+           char level = LogFilter.getLevelSymbolByCode(mLogConfiguration.getLevelFilter());
 
            StringBuilder filter = new StringBuilder();
-           for(String tag : mSettings.getTagFilter()){
+           for(String tag : mLogConfiguration.getTagFilter()){
                 filter.append(" ");
                 filter.append(tag);
                 filter.append(":");
@@ -150,23 +147,23 @@ class LogSavingTask extends BaseLogTask {
            }
            arguments.append(filter);
 
-        } else if (mSettings.getLevelFilter() > Log.VERBOSE){
+        } else if (mLogConfiguration.getLevelFilter() > Log.VERBOSE){
             arguments.append(" *:");
-            arguments.append(LogFilter.getLevelSymbolByCode(mSettings.getLevelFilter()));
+            arguments.append(LogFilter.getLevelSymbolByCode(mLogConfiguration.getLevelFilter()));
         }
 
     	return arguments.toString();
 	}
 	
 	private boolean needRotateLogFile(){
-		LogSettings.LogFileRotationType rotationType = mSettings.getLogFileRotationType();
+		LogConfiguration.LogFileRotationType rotationType = mLogConfiguration.getLogFileRotationType();
 		switch (rotationType) {
 		
 			case ROTATION_BY_SIZE:
-				return mLogFile.length() >= mSettings.getLogFileRotationSize();
+				return mLogFile.length() >= mLogConfiguration.getLogFileRotationSize();
 			
 			case ROTATION_BY_TIME:
-				return System.currentTimeMillis() - mFileCreationTime >= mSettings.getLogFileRotationTime();
+				return System.currentTimeMillis() - mFileCreationTime >= mLogConfiguration.getLogFileRotationTime();
 				
 			case NONE:
 				return false;
@@ -185,7 +182,7 @@ class LogSavingTask extends BaseLogTask {
 		}
 		
 		String tempFileNamePrefix = TEMP_FILE_PREFIX + System.currentTimeMillis();
-		String tempLogFilePath = mSettings.getLogFileName() + tempFileNamePrefix + mFileFormatter.getFileExtension();
+		String tempLogFilePath = mLogConfiguration.getLogFileName() + tempFileNamePrefix + mFileFormatter.getFileExtension();
 		mLogFile.renameTo(new File(tempLogFilePath));
 
         mPreferences.saveString(TEMP_FILE_NAME, tempLogFilePath);

@@ -1,7 +1,6 @@
 package com.logtracking.lib.internal.upload;
 
-import com.logtracking.lib.api.LogContext;
-import com.logtracking.lib.api.settings.LogSettings;
+import com.logtracking.lib.internal.LogContext;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -10,7 +9,7 @@ import android.net.NetworkInfo;
 class ConnectionChecker {
 
 	public static boolean isNetworkConnected(LogContext logContext){
-        if (logContext.getLogSettings().isSendReportOnlyByWifi()){
+        if (logContext.getLogConfiguration().isSendReportOnlyByWifi()){
             return   isWifiConnected(logContext.getApplicationContext());
         }  else {
             return isWifiConnected(logContext.getApplicationContext()) ||

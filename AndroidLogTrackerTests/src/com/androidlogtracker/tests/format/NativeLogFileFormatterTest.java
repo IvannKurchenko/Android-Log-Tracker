@@ -2,12 +2,12 @@ package  com.androidlogtracker.tests.format;
 
 import android.text.TextUtils;
 import com.androidlogtracker.tests.util.TestDocument;
-import com.logtracking.lib.api.MetaDataCollector;
 import com.logtracking.lib.internal.LogModel;
 import com.logtracking.lib.internal.format.LogFileFormatter;
 import com.logtracking.lib.internal.format.NativeLogFileFormatter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,9 +46,9 @@ public class NativeLogFileFormatterTest extends AbstractFormatterTest {
         TestDocument testDocument = formatDefaultDocument();
         TestDocument parsedDocument = tryParse(testDocument);
 
-        for( Map.Entry<String,String> entry : parsedDocument.mMetaDataCollector.getData().entrySet() ){
+        for( Map.Entry<String,String> entry : parsedDocument.mMetaData.entrySet() ){
 
-            String originalValue = testDocument.mMetaDataCollector.getData().get( entry.getKey() );
+            String originalValue = testDocument.mMetaData.get( entry.getKey() );
             String parsedValue = entry.getValue();
             assertEquals("Meta-data not same", originalValue, parsedValue);
 
@@ -75,7 +75,7 @@ public class NativeLogFileFormatterTest extends AbstractFormatterTest {
         String formattedDocument = testDocument.mFormattedDocument;
 
         String reportMessage = tryParseReportMessage(formattedDocument);
-        MetaDataCollector metaDataCollector = tryParseMetaData(formattedDocument);
+        Map<String,String> metaDataCollector = tryParseMetaData(formattedDocument);
         List<LogModel> logRecords = tryParseLogRecords(formattedDocument);
 
         return new TestDocument(reportMessage,metaDataCollector,logRecords,formattedDocument);
@@ -90,13 +90,13 @@ public class NativeLogFileFormatterTest extends AbstractFormatterTest {
         return  removeNonCharacterSymbols(reportMessage);
     }
 
-    private MetaDataCollector tryParseMetaData(String formattedDocument) {
+    private Map<String,String> tryParseMetaData(String formattedDocument) {
 
         String metaData = getContentBetweenTags(formattedDocument,  mFormatter.getMetaDataOpenTag(),
                                                                     mFormatter.getMetaDataCloseTag());
 
 
-        MetaDataCollector metaDataCollector = new MetaDataCollector();
+        Map<String,String> result = new HashMap<String,String>();
         String[] metaDataList = metaData.split(LINE_SEPARATOR);
 
         for (String metaDataPair : metaDataList) {
@@ -107,10 +107,10 @@ public class NativeLogFileFormatterTest extends AbstractFormatterTest {
             String[] keyValuePair = metaDataPair.split("=");
             String key = removeNonCharacterSymbols(keyValuePair[0]);
             String value = removeNonCharacterSymbols(keyValuePair[1]);
-            metaDataCollector.put(key, value);
+            result.put(key, value);
         }
 
-        return metaDataCollector;
+        return result;
 
     }
 

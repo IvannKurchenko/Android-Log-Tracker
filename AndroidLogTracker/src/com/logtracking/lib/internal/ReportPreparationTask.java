@@ -4,15 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-import com.logtracking.lib.api.settings.LogSettings;
-import com.logtracking.lib.api.MetaDataCollector;
-
-import android.content.Context;
-
 class ReportPreparationTask extends BaseLogTask{
 	
-	protected ReportPreparationTask(Context applicationContext , MetaDataCollector metaDataCollector, LogSettings settings) {
-		super(applicationContext, metaDataCollector, settings);
+	protected ReportPreparationTask(LogContext logContext) {
+		super(logContext);
 	}
 		
 	private void prepareFullReport() throws IOException{
@@ -21,7 +16,7 @@ class ReportPreparationTask extends BaseLogTask{
 		String rotatedFile = mPreferences.getString(TEMP_FILE_NAME, null);
 		mergeLogFile(rotatedFile);
 		
-		String currentLogFile = mSettings.getLogFileName() + mFileFormatter.getFileExtension();
+		String currentLogFile = mLogConfiguration.getLogFileName() + mFileFormatter.getFileExtension();
 		mergeLogFile(currentLogFile);
 	}
 	

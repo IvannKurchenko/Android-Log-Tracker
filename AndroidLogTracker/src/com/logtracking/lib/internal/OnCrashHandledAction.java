@@ -3,8 +3,8 @@ package com.logtracking.lib.internal;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import com.logtracking.lib.api.settings.LogConfiguration;
-import com.logtracking.lib.api.settings.LogConfiguration.AfterCrashAction;
+import com.logtracking.lib.api.config.LogConfiguration;
+import com.logtracking.lib.api.config.LogConfiguration.AfterCrashAction;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ interface OnCrashHandledAction {
 
 	void onCrashHandled(Context applicationContext);
 
-    static class Actions {
+    static class ActionResolver {
         private static Map<AfterCrashAction,CrashHandlingAction> sActions;
         static {
             sActions = new EnumMap<AfterCrashAction,CrashHandlingAction>(AfterCrashAction.class);

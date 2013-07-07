@@ -3,14 +3,13 @@ package com.logtracking.lib.internal;
 import java.util.ArrayList;
 import java.util.List;
 import com.logtracking.lib.api.Log;
-import com.logtracking.lib.api.LogContext;
-import com.logtracking.lib.api.settings.LogSettings;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.SparseArray;
+import com.logtracking.lib.api.config.LogConfiguration;
 
 public class LogFilter {
 
@@ -40,7 +39,7 @@ public class LogFilter {
 	private Integer mLevelFilter;
 	private boolean mOnlyOwnLogRecord;
 	private Context mApplicationContext;
-	private LogSettings mSettings;
+	private LogConfiguration mConfiguration;
 	
 	protected boolean filterAvailable(){
 		return (mPidFilter !=null && mPidFilter.size()>0) ||
@@ -58,10 +57,10 @@ public class LogFilter {
 	
 	public void initFilter(LogContext logContext){
 		mApplicationContext = logContext.getApplicationContext();
-		mSettings = logContext.getLogSettings();
-		mPidFilter = packageNameFilterToPIDFilter(mSettings.getApplicationPackageFilter());
-		mLevelFilter = mSettings.getLevelFilter();
-		mOnlyOwnLogRecord = mSettings.isSaveOnlyOwnRecord();
+		mConfiguration = logContext.getLogConfiguration();
+		mPidFilter = packageNameFilterToPIDFilter(mConfiguration.getApplicationPackageFilter());
+		mLevelFilter = mConfiguration.getLevelFilter();
+		mOnlyOwnLogRecord = mConfiguration.isFilterOnlyOwnRecord();
 	}
 	
 	public String packageNameByPid(int pid){
@@ -102,6 +101,6 @@ public class LogFilter {
 	}
 	
 	private void refreshPackageFilter(){
-		mPidFilter = packageNameFilterToPIDFilter(mSettings.getApplicationPackageFilter());
+		mPidFilter = packageNameFilterToPIDFilter(mConfiguration.getApplicationPackageFilter());
 	}
 }

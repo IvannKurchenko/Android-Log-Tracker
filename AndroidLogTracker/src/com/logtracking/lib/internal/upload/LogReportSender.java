@@ -2,10 +2,7 @@ package com.logtracking.lib.internal.upload;
 
 import java.io.File;
 
-import android.content.Context;
-
-import com.logtracking.lib.api.LogContext;
-import com.logtracking.lib.api.settings.LogSettings;
+import com.logtracking.lib.internal.LogContext;
 import com.logtracking.lib.internal.IssueReport;
 
 public abstract class LogReportSender {

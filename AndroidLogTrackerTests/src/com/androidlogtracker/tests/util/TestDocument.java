@@ -1,20 +1,19 @@
 package com.androidlogtracker.tests.util;
-
-import com.logtracking.lib.api.MetaDataCollector;
 import com.logtracking.lib.internal.LogModel;
 
 import java.util.List;
+import java.util.Map;
 
 public class TestDocument {
 
     public String mMessage;
-    public MetaDataCollector mMetaDataCollector;
+    public Map<String,String> mMetaData;
     public List<LogModel> mRecords;
     public String mFormattedDocument;
 
-    public TestDocument(String message , MetaDataCollector metaData, List<LogModel> records , String formattedDocument){
+    public TestDocument(String message , Map<String,String> metaData, List<LogModel> records , String formattedDocument){
         mMessage = message;
-        mMetaDataCollector = metaData;
+        mMetaData = metaData;
         mRecords = records;
         mFormattedDocument = formattedDocument;
     }

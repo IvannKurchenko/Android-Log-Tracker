@@ -1,8 +1,6 @@
 package com.logtracking.lib.internal;
 
-import com.logtracking.lib.api.LogContext;
-import com.logtracking.lib.api.settings.LogSettings;
-import com.logtracking.lib.api.OnCrashHandledListener;
+import com.logtracking.lib.api.config.LogConfiguration;
 import com.logtracking.lib.internal.upload.LogFileSenderFactory;
 import com.logtracking.lib.internal.upload.LogReportSender;
 
@@ -37,8 +35,7 @@ public class IssueReporter {
     private final int POOL_SIZE = 3;
 
 	private Context mApplicationContext;
-	private LogSettings mSettings;
-	private OnCrashHandledListener mCrashListener;
+	private LogConfiguration mLogConfiguration;
 	private LogReportSender mLogFileSender;
     private LogFileManager mLogFileManager;
 	private AndroidNotifier mNotifier;
@@ -50,8 +47,7 @@ public class IssueReporter {
 	
 	public IssueReporter(LogContext logContext , LogFileManager fileManager) {
 		mApplicationContext = logContext.getApplicationContext();
-		mSettings = logContext.getLogSettings();
-		mCrashListener = logContext.getOnCrashListener();
+        mLogConfiguration = logContext.getLogConfiguration();
         mLogFileManager = fileManager;
 		mNotifier = new AndroidNotifier(logContext);
         mSendingService = Executors.newFixedThreadPool(POOL_SIZE);
@@ -93,8 +89,8 @@ public class IssueReporter {
 	}
 	
 	protected void notifyCrashListener(){
-		if (mReportIssueDialogMode == SHOW_CRASH_REPORT_DIALOG && mCrashListener != null){
-			mCrashListener.onCrashHandled(mApplicationContext,mCrashedThread, mUncaughtException);
+		if (mReportIssueDialogMode == SHOW_CRASH_REPORT_DIALOG){
+			OnCrashHandledAction.ActionResolver.getAction(mLogConfiguration).onCrashHandled(mApplicationContext);
 		}
 	}
 	
@@ -107,7 +103,7 @@ public class IssueReporter {
 	}
 
 	protected boolean isSendingSupport(){
-		return mSettings.getSendingSettings() != null;
+		return mLogConfiguration.getSendingSettings() != null;
 	}
 
 }

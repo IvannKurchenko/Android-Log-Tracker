@@ -3,8 +3,8 @@ package com.logtracking.lib.internal.upload;
 
 import javax.mail.MessagingException;
 
-import com.logtracking.lib.api.LogContext;
-import com.logtracking.lib.api.settings.EmailLogSendingSettings;
+import com.logtracking.lib.api.config.EmailLogSendingConfiguration;
+import com.logtracking.lib.internal.LogContext;
 import com.logtracking.lib.internal.IssueReport;
 
 class EmailLogReportSender extends LogReportSender {
@@ -16,7 +16,7 @@ class EmailLogReportSender extends LogReportSender {
 	public EmailLogReportSender(LogContext logContext) {
 		super(logContext);
 
-        EmailLogSendingSettings sendingSettings = (EmailLogSendingSettings) getLogContext().getLogSettings().getSendingSettings();
+        EmailLogSendingConfiguration sendingSettings = (EmailLogSendingConfiguration) getLogContext().getLogConfiguration().getSendingSettings();
 
         mEmailSender= new EmailSender(sendingSettings.getEmailHost(),
                                       sendingSettings.getEmailAddress(),

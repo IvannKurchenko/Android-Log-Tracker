@@ -17,8 +17,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.text.TextUtils;
 
-import com.logtracking.lib.api.settings.LogSettings;
-import com.logtracking.lib.api.MetaDataCollector;
+import com.logtracking.lib.api.config.LogConfiguration;
 import com.logtracking.lib.internal.format.LogFileFormatter;
 import com.logtracking.lib.internal.format.LogFileFormatterFactory;
 
@@ -31,11 +30,10 @@ public abstract class BaseLogTask extends AsyncTask <Void,Void,File> {
 	protected static final String FILE_CREATION_TIME = "log_file_creation_time";
 	protected static final String TEMP_FILE_NAME = "log_temp_file_name";
 	protected static final String CRASH_REPORT_MESSAGE = "Crash report";
-	
-	protected LogSettings mSettings;
-	protected Context mApplicationContext;
-	protected MetaDataCollector mMetaDataCollector;
-	
+
+	protected LogConfiguration mLogConfiguration;
+    protected Context mApplicationContext;
+
 	protected RandomAccessFile mRandomAccessFile;
 	protected LogFileFormatter mFileFormatter;
 	
@@ -48,13 +46,12 @@ public abstract class BaseLogTask extends AsyncTask <Void,Void,File> {
 
 	protected long mFileCreationTime;
 	
-	protected BaseLogTask(Context applicationContext , MetaDataCollector metaDataCollector, LogSettings settings) {
+	protected BaseLogTask(LogContext logContext) {
 		super();
-		mSettings = settings;
-		mApplicationContext = applicationContext;
-		mMetaDataCollector = metaDataCollector;
-		mFileFormatter = LogFileFormatterFactory.getFormatter(mSettings);
-        mPreferences = LogPreferences.getInstance(mApplicationContext);
+		mLogConfiguration = logContext.getLogConfiguration();
+        mApplicationContext = logContext.getApplicationContext();
+		mFileFormatter = LogFileFormatterFactory.getFormatter(logContext.getLogConfiguration());
+        mPreferences = LogPreferences.getInstance(logContext.getApplicationContext());
 	}
 	
 	protected void setReportPrepareListener(LogFileManager.ReportPrepareListener listener){
@@ -142,16 +139,14 @@ public abstract class BaseLogTask extends AsyncTask <Void,Void,File> {
 			writeLineToFile(mFileFormatter.formatMessage(mReportMessage));
 		}
 	}
-	
-	private void writeMetaData() throws IOException{
-		if (mMetaDataCollector!= null && !mMetaDataCollector.isEmpty()){
-			writeLineToFile(mFileFormatter.getMetaDataOpenTag());
-			writeLineToFile(mFileFormatter.formatMetaData(mMetaDataCollector.getData()));
-			writeLineToFile(mFileFormatter.getMetaDataCloseTag());
-		}
-	}
-	
-	protected void seekFilePointerBeforeCloseTags() throws IOException{
+
+    private void writeMetaData() throws IOException {
+        writeLineToFile(mFileFormatter.getMetaDataOpenTag());
+        writeLineToFile(mFileFormatter.formatMetaData(mLogConfiguration.getMetaData()));
+        writeLineToFile(mFileFormatter.getMetaDataCloseTag());
+    }
+
+    protected void seekFilePointerBeforeCloseTags() throws IOException{
 		long closeTagsLength = getWriteLineLength(mFileFormatter.getLoggingCloseTag()) +
 				   getWriteLineLength(mFileFormatter.getDocumentCloseTag());
 
@@ -187,7 +182,7 @@ public abstract class BaseLogTask extends AsyncTask <Void,Void,File> {
 
         List<File> reportFiles = new ArrayList<File>();
         reportFiles.add(mLogFile);
-		for(String attachFile : mSettings.getAttachedFilesToReport()){
+		for(String attachFile : mLogConfiguration.getAttachedFilesToReport()){
             reportFiles.add(new File(attachFile));
 		}
 

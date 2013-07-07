@@ -76,7 +76,7 @@ public class XmlLogFileFormatterTest extends AbstractFormatterTest {
     public void testMetaDataInfoShouldBeEqual() {
         TestDocument testDocument = formatMetaData(1);
         Document xmlDocument = tryParse(testDocument);
-        Map<String,String> meta =  testDocument.mMetaDataCollector.getData();
+        Map<String,String> meta =  testDocument.mMetaData;
         NodeList nodes = xmlDocument.getElementsByTagName(META_DATA_TAG);
 
         for (int i = 0; i < nodes.getLength(); i++) {

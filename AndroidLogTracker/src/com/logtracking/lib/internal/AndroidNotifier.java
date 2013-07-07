@@ -2,8 +2,6 @@ package com.logtracking.lib.internal;
 
 
 import com.androidlogtracker.R;
-import com.logtracking.lib.api.LogContext;
-import com.logtracking.lib.api.settings.LogSettings;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -11,6 +9,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import com.logtracking.lib.api.config.LogConfiguration;
 
 class AndroidNotifier {
 
@@ -21,11 +20,11 @@ class AndroidNotifier {
 	private String mSuccessUploadNotificationMessage;
 	private String mFailUploadNotificationMessage;
 	
-	private LogSettings mSettings;
+	private LogConfiguration mLogConfiguration;
 	
 	public AndroidNotifier(LogContext logContext) {
 		mApplicationContext = logContext.getApplicationContext();
-		mSettings = logContext.getLogSettings();
+		mLogConfiguration = logContext.getLogConfiguration();
 		mNotificationManager = (NotificationManager) mApplicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationSubject = mApplicationContext.getResources().getString(R.string.alt_report_notification_subject);
 		mSuccessUploadNotificationMessage = mApplicationContext.getResources().getString(R.string.alt_report_notification_success_upload_message);
@@ -33,13 +32,13 @@ class AndroidNotifier {
 	}
 	
 	void sendSuccessUploadNotification(){
-		if (mSettings.isNotifyAboutReportSendResult()){
+		if (mLogConfiguration.isNotifyAboutReportSendResult()){
 			sendNotification(mSuccessUploadNotificationMessage);
 		}
 	}
 	
 	void sendFailUploadNotification(){
-		if (mSettings.isNotifyAboutReportSendResult()){
+		if (mLogConfiguration.isNotifyAboutReportSendResult()){
 			sendNotification(mFailUploadNotificationMessage);
 		}
 	}

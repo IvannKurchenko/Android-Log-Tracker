@@ -1,9 +1,9 @@
-package com.logtracking.lib.api.settings;
+package com.logtracking.lib.api.config;
 
 /**
- * General interface for sending or uploading service settings.
+ * General interface for sending or uploading service config.
  */
-public interface LogSendingSettings {
+public interface LogSendingConfiguration {
 
     /**
      * Enum representing possible services for sending bug reports.
@@ -12,7 +12,7 @@ public interface LogSendingSettings {
 
         /**
          * Represent sending bug report via email.
-         * @see  EmailLogSendingSettings
+         * @see  EmailLogSendingConfiguration
          */
 		E_MAIL,
 	}

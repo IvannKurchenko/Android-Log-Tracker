@@ -1,6 +1,6 @@
 package com.androidlogtracker.tests.util;
 
-import com.logtracking.lib.api.LogContext;
+import com.logtracking.lib.internal.LogContext;
 import com.logtracking.lib.internal.IssueReporter;
 
 public class FakeIssueReporter extends IssueReporter{

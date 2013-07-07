@@ -1,16 +1,15 @@
-package com.logtracking.lib.api.settings;
+package com.logtracking.lib.api.config;
 
 import android.content.Context;
 import android.text.TextUtils;
 import com.logtracking.lib.api.Log;
-import com.logtracking.lib.api.MetaDataCollector;
 
 import java.io.File;
 import java.util.*;
 
 import static com.logtracking.lib.api.Log.*;
-import static com.logtracking.lib.api.settings.NonModifiableCollections.newNonModifiableList;
-import static com.logtracking.lib.api.settings.NonModifiableCollections.newNonModifiableMap;
+import static com.logtracking.lib.api.config.NonModifiableCollections.newNonModifiableList;
+import static com.logtracking.lib.api.config.NonModifiableCollections.newNonModifiableMap;
 
 /**
  * Class representing global configuration of logging, creating and formatting issue reports,strategies of crash handling, etc.
@@ -42,14 +41,14 @@ public final class LogConfiguration {
          *      <br> - Allowed android notification about report send result;
          *      <br> - All logging available;
          *      <br> - Log saving mode is {@link LogSavingMode#SAVE_ALL_LOG_IN_FILE};
-         *      <br> - Log file rotation is {@link com.logtracking.lib.api.settings.LogSettings.LogFileRotationType#ROTATION_BY_SIZE}  with size 1 MB;
-         *      <br> - Saving of default meta-data;
+         *      <br> - Log file rotation is {@link com.logtracking.lib.api.config.LogConfiguration.LogFileRotationType#ROTATION_BY_SIZE}  with size 1 MB;
+         *      <br> - Collected default meta-data;
          *      <br> - Log messages filtering by package of current application;
          *      <br> - Folder with log files locate in application cache of in application folder if SD card not exist;
          *      <br> - File format is {@link LogFileFormat#DEFAULT};
          *
          * @param context  application context
-         * @return         new instance of default settings.
+         * @return         new instance of default config.
          * @throws NullPointerException if context null.
          */
         public static LogConfigurationBuilder newDebugConfiguration(Context context){
@@ -79,15 +78,15 @@ public final class LogConfiguration {
          *      <br> - Disallowed android notification about report send result;
          *      <br> - Logging not available;
          *      <br> - Log saving mode is {@link LogSavingMode#SAVE_ONLY_IF_NEEDED};
-         *      <br> - Log file rotation is {@link com.logtracking.lib.api.settings.LogSettings.LogFileRotationType#NONE};
-         *      <br> - Saving of default meta-data;
+         *      <br> - Log file rotation is {@link com.logtracking.lib.api.config.LogConfiguration.LogFileRotationType#NONE};
+         *      <br> - Collected default meta-data;
          *      <br> - Issue report will be send on by WiFi.
          *      <br> - Log messages filtering by package of current application;
          *      <br> - Folder with log files locate in application cache of in application folder if SD card not exist.
          *      <br> - File format is {@link LogFileFormat#DEFAULT};
          *
          * @param context application context
-         * @return        new instance of production settings.
+         * @return        new instance of production config.
          * @throws NullPointerException if context null.
          */
         public static LogConfigurationBuilder newProductionConfiguration(Context context){
@@ -146,7 +145,7 @@ public final class LogConfiguration {
          */
         private LogSavingMode mLogSavingMode;
         private String mLogDirectoryName;
-        private String mLogFileName;
+        private String  mLogFileName;
         private LogFileFormat mLogFileFormat;
         private LogFileRotationType mLogFileRotationType;
         private long mLogFileRotationSize;
@@ -156,7 +155,7 @@ public final class LogConfiguration {
         /*
          * Sending config
          */
-        private LogSendingSettings mSendingSettings;
+        private LogSendingConfiguration mSendingSettings;
 
         /*
          * Additional
@@ -172,6 +171,7 @@ public final class LogConfiguration {
                             applicationContext.getFilesDir().getAbsoluteFile();
 
             mLogDirectoryName = appDir.getPath()  + FILE_NAME_SEPARATOR + LOG_FILES_DIRECTORY;
+            mLogFileName = mLogDirectoryName + FILE_NAME_SEPARATOR + DEFAULT_LOG_FILE_NAME;
             mLogFileFormat = LogFileFormat.DEFAULT;
             mApplicationPackage = applicationContext.getPackageName();
             mMetaData = new MetaDataCollector(applicationContext).getData();
@@ -318,7 +318,7 @@ public final class LogConfiguration {
 
         /**
          * Set max log file size. If log file size is more, that was set,  file rotation started.
-         * Also this method set file rotation mode - {@link com.logtracking.lib.api.settings.LogSettings.LogFileRotationType#ROTATION_BY_SIZE}.
+         * Also this method set file rotation mode - {@link com.logtracking.lib.api.config.LogConfiguration.LogFileRotationType#ROTATION_BY_SIZE}.
          *
          * @param fileRotationSize max size of file in bytes.
          * @return current instance.
@@ -334,7 +334,7 @@ public final class LogConfiguration {
 
         /**
          * Set max log file live time in milliseconds. If log file live time is more , that was set, file rotation started.
-         * Also this method set file rotation mode - {@link com.logtracking.lib.api.settings.LogSettings.LogFileRotationType#ROTATION_BY_TIME}.
+         * Also this method set file rotation mode - {@link com.logtracking.lib.api.config.LogConfiguration.LogFileRotationType#ROTATION_BY_TIME}.
          *
          * @param fileRotationTime max time of file living if milliseconds.
          * @return current instance.
@@ -349,7 +349,7 @@ public final class LogConfiguration {
 
 
         /**
-         * Set mode file rotation mode - {@link com.logtracking.lib.api.settings.LogSettings.LogFileRotationType#NONE}.
+         * Set mode file rotation mode - {@link com.logtracking.lib.api.config.LogConfiguration.LogFileRotationType#NONE}.
          * During save messages in file, old messages will not be deleted.
          *
          * @return current instance.
@@ -376,15 +376,15 @@ public final class LogConfiguration {
         }
 
         /**
-         * Set implementation of settings for appropriate service , that will send bug reports.
+         * Set implementation of config for appropriate service , that will send bug reports.
          *
-         * @see LogSendingSettings.SendingService
-         * @see EmailLogSendingSettings
-         * @param sendingSettings settings of sending service.
+         * @see LogSendingConfiguration.SendingService
+         * @see EmailLogSendingConfiguration
+         * @param sendingSettings config of sending service.
          * @return current instance.
          * @throws NullPointerException if sendingSettings is null
          */
-        public LogConfigurationBuilder setSendingSettings(LogSendingSettings sendingSettings){
+        public LogConfigurationBuilder setSendingSettings(LogSendingConfiguration sendingSettings){
             checkNotNull(sendingSettings);
             mSendingSettings = sendingSettings;
             return this;
@@ -397,10 +397,12 @@ public final class LogConfiguration {
          * @param key meta-data key
          * @param value meta-data value
          * @throws IllegalArgumentException if meta-data key will be empty.
+         * @return current instance.
          */
-        public void putMetaData(String key,String value){
+        public LogConfigurationBuilder putMetaData(String key,String value){
             checkEmpty(key,"Meta-data key shouldn't be null");
             mMetaData.put(key, value != null ? value : "");
+            return this;
         }
 
         /**
@@ -409,10 +411,12 @@ public final class LogConfiguration {
          * @see AfterCrashAction
          * @param action type action
          * @throws NullPointerException if action is null.
+         * @return current instance.
          */
-        public void setAfterCrashAction(AfterCrashAction action){
+        public LogConfigurationBuilder setAfterCrashAction(AfterCrashAction action){
             checkNotNull(action);
             mAfterCrashAction = action;
+            return this;
         }
 
         /**
@@ -434,7 +438,7 @@ public final class LogConfiguration {
          * Log file will be rotated time-to-time by choosing rotation mode.
          * Issue report will contains all saved messages.
          *
-         * @see com.logtracking.lib.api.settings.LogSettings.LogFileRotationType
+         * @see com.logtracking.lib.api.config.LogConfiguration.LogFileRotationType
          */
         SAVE_ALL_LOG_IN_FILE,
 
@@ -481,14 +485,14 @@ public final class LogConfiguration {
         /**
          * In this mode log file will be rotated if file time of living is more then set.
          *
-         * @see LogSettings#setLogFileRotationTime(long)
+         * @see LogConfiguration.LogConfigurationBuilder#setLogFileRotationTime(long)
          */
         ROTATION_BY_SIZE,
 
         /**
          * In this mode log file will be rotated if file size is more then set.
          *
-         * @see LogSettings#setLogFileRotationSize(long)
+         * @see LogConfiguration.LogConfigurationBuilder#setLogFileRotationSize(long)
          */
         ROTATION_BY_TIME,
 
@@ -544,7 +548,7 @@ public final class LogConfiguration {
     /*
      * Sending config
      */
-    private final LogSendingSettings mSendingSettings;
+    private final LogSendingConfiguration mSendingSettings;
 
     /*
      * Additional
@@ -637,7 +641,7 @@ public final class LogConfiguration {
         return mFilesAttachedToReport;
     }
 
-    public LogSendingSettings getSendingSettings(){
+    public LogSendingConfiguration getSendingSettings(){
         return mSendingSettings;
     }
 

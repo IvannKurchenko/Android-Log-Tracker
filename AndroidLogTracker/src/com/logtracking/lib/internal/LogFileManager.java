@@ -8,14 +8,11 @@ import java.util.Date;
 import java.util.List;
 
 import com.logtracking.lib.api.Log;
-import com.logtracking.lib.api.LogContext;
-import com.logtracking.lib.api.settings.LogSettings;
-import com.logtracking.lib.api.settings.LogSettings.LogSavingMode;
-import com.logtracking.lib.api.MetaDataCollector;
+import com.logtracking.lib.api.config.LogConfiguration;
 import com.logtracking.lib.internal.format.LogFileFormatter;
 import com.logtracking.lib.internal.format.LogFileFormatterFactory;
+import com.logtracking.lib.api.config.LogConfiguration.*;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 public class LogFileManager {
@@ -59,17 +56,15 @@ public class LogFileManager {
 		}
 		
 		private boolean needToResumeLogSaving(){
-			return (mSettings.getLogSavingMode() == LogSavingMode.SAVE_ALL_LOG_IN_FILE) &&
+			return (mLogContext.getLogConfiguration().getLogSavingMode() == LogConfiguration.LogSavingMode.SAVE_ALL_LOG_IN_FILE) &&
 				   (mPreparationTasksCount == 0 ) &&
 				   (mSaveLogTask != null); 
 		}
 	};
 	
-	private Context mApplicationContext;
+	private LogContext mLogContext;
 	private LogFilter mLogFilter;
-	private LogSettings mSettings;
 	private LogSavingTask mSaveLogTask;
-	private MetaDataCollector mMetaDataCollector;
 	private SimpleDateFormat mDateFormat;
 	private ReportPrepareListener mOnReportPrepareListener;
 	private File mLogFilesDirectory;
@@ -79,21 +74,19 @@ public class LogFileManager {
 	private int mPreparationTasksCount;
 	
 	public LogFileManager(LogContext logContext){
-		mApplicationContext = logContext.getApplicationContext();
-		mSettings = logContext.getLogSettings();
-		mMetaDataCollector = logContext.getMetaDataCollector();
+        mLogContext = logContext;
 		mLogFilter = LogFilter.getInstance();
 		mDateFormat = new SimpleDateFormat("yyyy.MM.dd_HH.mm.ss");
-		mLogFilesDirectory = new File(mSettings.getLogDirectoryName());
-		String reportsDirectory = mSettings.getLogDirectoryName() + FILE_NAME_SEPARATOR + REPORT_DIRECTORY_NAME;
+		mLogFilesDirectory = new File(mLogContext.getLogConfiguration().getLogDirectoryName());
+		String reportsDirectory = mLogContext.getLogConfiguration().getLogDirectoryName() + FILE_NAME_SEPARATOR + REPORT_DIRECTORY_NAME;
 		mReportDeprecatory = new File(reportsDirectory);
-		mFileFormatter = LogFileFormatterFactory.getFormatter(mSettings);
+		mFileFormatter = LogFileFormatterFactory.getFormatter(mLogContext.getLogConfiguration());
 	}
 	
 	public void startLogSaving(){
-		if (mSettings.getLogSavingMode() == LogSavingMode.SAVE_ALL_LOG_IN_FILE && !isSaving()){
+		if (mLogContext.getLogConfiguration().getLogSavingMode() == LogSavingMode.SAVE_ALL_LOG_IN_FILE && !isSaving()){
 			prepareLogDirectory();
-			mSaveLogTask = new LogSavingTask(mApplicationContext,mMetaDataCollector,mSettings);
+			mSaveLogTask = new LogSavingTask(mLogContext);
 			mSaveLogTask.startProcess();
 		}
 	}
@@ -113,7 +106,7 @@ public class LogFileManager {
 		
 		if(!isSaving()){
 			
-			if (mSettings.isLoggingAvailable()){
+			if (mLogContext.getLogConfiguration().isLoggingAvailable()){
 				saveLogDump(null,BaseLogTask.CRASH_REPORT_MESSAGE,onReportPrepareListener);
 			} else {
 				saveCrash(crashedThread, uncaughtException, onReportPrepareListener);
@@ -132,7 +125,7 @@ public class LogFileManager {
 		
 		if(!isSaving()){
 			
-			if (mSettings.isLoggingAvailable()){
+			if (mLogContext.getLogConfiguration().isLoggingAvailable()){
 				saveLogDump(null,BaseLogTask.CRASH_REPORT_MESSAGE,onReportPrepareListener);
 			}
 			
@@ -146,7 +139,7 @@ public class LogFileManager {
 		List<LogModel> crashList = new ArrayList<LogModel>();
 		String [] crashStackTrace = crashStr.split("\n");
 		
-		String packageName = mApplicationContext.getApplicationInfo().packageName;
+		String packageName = mLogContext.getApplicationContext().getApplicationInfo().packageName;
 		int pid = mLogFilter.getPidByPackageName(packageName);
 
         for (String crashStackTraceItem : crashStackTrace) {
@@ -156,7 +149,7 @@ public class LogFileManager {
 	}
 	
 	private void saveLogDump(List<LogModel> crashList,String message,ReportPrepareListener onReportPrepareListener){
-		LogSavingTask dumpLogTask = new LogSavingTask(mApplicationContext,mMetaDataCollector,mSettings);
+		LogSavingTask dumpLogTask = new LogSavingTask(mLogContext);
 		dumpLogTask.setCrashStack(crashList);
         dumpLogTask.setReportMessage(message);
 		dumpLogTask.setSaveDump(true);
@@ -170,7 +163,7 @@ public class LogFileManager {
 		mSaveLogTask.flush();
 		mSaveLogTask.setCaWriteInFile(false);
 		
-		ReportPreparationTask reportTask = new ReportPreparationTask(mApplicationContext, mMetaDataCollector, mSettings);
+		ReportPreparationTask reportTask = new ReportPreparationTask(mLogContext);
 		reportTask.setReportMessage(reportMessage);
 		reportTask.setReportPrepareListener(mInternalOnReportPreparationsListener);
 		reportTask.setLogFile(getReportFileName());	
@@ -204,5 +197,4 @@ public class LogFileManager {
 			dir.mkdirs();
 		}
 	}
-	
 }
