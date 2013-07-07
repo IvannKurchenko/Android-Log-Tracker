@@ -162,6 +162,7 @@ public final class LogConfiguration {
          * Additional
          */
         private Map<String,String> mMetaData;
+        private AfterCrashAction mAfterCrashAction;
 
         private String mApplicationPackage;
 
@@ -403,6 +404,18 @@ public final class LogConfiguration {
         }
 
         /**
+         * Set type of action that will be performed after showing library crash dialog.
+         *
+         * @see AfterCrashAction
+         * @param action type action
+         * @throws NullPointerException if action is null.
+         */
+        public void setAfterCrashAction(AfterCrashAction action){
+            checkNotNull(action);
+            mAfterCrashAction = action;
+        }
+
+        /**
          * Builds instance of {@link LogConfiguration}.
          * @return new  configured instance {@link LogConfiguration}.
          */
@@ -485,6 +498,22 @@ public final class LogConfiguration {
         NONE
     }
 
+    /**
+     * Enum representing actions that will be performed after showing dialog about application crash.
+     */
+    public enum AfterCrashAction {
+
+        /**
+         * This action will close application after crash handling.
+         */
+        CLOSE_APPLICATION,
+
+        /**
+         * This action will relaunch application after crash handling.
+         */
+        RELAUNCH_APPLICATION
+    }
+
     /*
      * General config
      */
@@ -521,6 +550,7 @@ public final class LogConfiguration {
      * Additional
      */
     private final Map<String,String> mMetaData;
+    private final AfterCrashAction mAfterCrashAction;
 
     private LogConfiguration(LogConfigurationBuilder builder){
         mLoggingAvailable = builder.mLoggingAvailable;
@@ -544,6 +574,7 @@ public final class LogConfiguration {
         mSendingSettings = builder.mSendingSettings;
 
         mMetaData = newNonModifiableMap(builder.mMetaData);
+        mAfterCrashAction = builder.mAfterCrashAction;
     }
 
     public boolean isLoggingAvailable(){
@@ -612,5 +643,9 @@ public final class LogConfiguration {
 
     public Map<String,String> getMetaData(){
         return mMetaData;
+    }
+
+    public AfterCrashAction getAfterCrashAction(){
+        return mAfterCrashAction;
     }
 }
