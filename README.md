@@ -67,6 +67,9 @@ logging:
 
 }</code> </pre>
 
+- **HTML**
+![Alt text](http://s21.postimg.org/nmhb0edpy/Screenshot_at_2013_07_15_18_36_04.jpg)
+
 Set appropriate format you can using method <code>setLogFileFormat</code> in <code>LogConfigurationBuilder</code> class. 
 
 ##Log saving and log file rotating
