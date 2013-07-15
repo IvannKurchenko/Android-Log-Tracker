@@ -67,43 +67,52 @@ logging:
 
 }</code> </pre>
 
-Set appropriate format you can using method <code>setLogFileFormat</code> in <code>LogSettings</code> class. 
+Set appropriate format you can using method <code>setLogFileFormat</code> in <code>LogConfigurationBuilder</code> class. 
 
 ##Log saving and log file rotating
 Library supports two mode for saving log messages in separate file , it's : 
-- <code>LogSettings.LogSavingMode.SAVE_ALL_LOG_IN_FILE</code>  - saves filter log messages into separate file while application works and rotate this file time-to-time.
+- <code>LogConfiguration.LogSavingMode.SAVE_ALL_LOG_IN_FILE</code>  - saves filter log messages into separate file while application works and rotate this file time-to-time.
  
-- <code>LogSettings.LogSavingMode.SAVE_ONLY_IF_NEEDED</code> – saves filtered log messages 	into separate file , only before bug or crash report preparation.
+- <code>LogConfiguration.LogSavingMode.SAVE_ONLY_IF_NEEDED</code> – saves filtered log messages 	into separate file , only before bug or crash report preparation.
 
 To avoid growing of log file while application next mode's of log file rotating could be used : 
-- Rotating by timeout – rotate log file by setted timeout in log settings. Use method <code>setLogFileRotationTime()</code> in <code>LogSettings</code> class.
+- Rotating by timeout – rotate log file by setted timeout of current log file "life time". Use method <code>setLogFileRotationTime()</code> in <code>LogConfigurationBuilder</code> class.
 
-- Rotating by file size – rotate log file by setted maximum size of current log file. Use method <code>setLogFileRotationSize()</code>  in <code>LogSettings</code> class.
+- Rotating by file size – rotate log file by setted maximum size of current log file. Use method <code>setLogFileRotationSize()</code>  in <code>LogConfigurationBuilder</code> class.
 
 
 ##Usage example
-Before any logging using , you should initialize log by invocation method <code>Log.init(LogContext logContext)</code>. For this, recommended create custom application class , and initialize log in <code>onCreate</code> method. 
+Before any logging using , you should initialize log by invocation method <code>Log.init(LogConfiguration logConfiguration,Context applicationContext)</code>. For this, recommended create custom application class , and initialize log in <code>onCreate</code> method. 
 
 <pre><code> public class YourApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
 	
-		//Create new  log settings  and configure it. 
-		LogSettings settings = LogSettings.newDebugSettings(this);
+		EmailLogSendingConfiguration emailLogSendingConfiguration = new EmailLogSendingConfiguration(
+                                            "example.email.@gmail.com" ,
+                                            "pass",
+                                            "developer.email@gmail.com");
 
-		EmailLogSendingSettings emailSettings = new EmailLogSendingSettings("your.email@gmail.com", "password", “report.recipient@gmail.com");
-		settings.setSendingSettings(emailSettings);
-		
-		MetaDataCollector metaDataCollector = new MetaDataCollector(this);
-		metaDataCollector.put("meta-key","meta-value");
-        
-		LogContext logContext = new LogContext.LogContextBuilder(this).
-														setSettings(settings).
-														setMetaDataCollector(metaDataCollector).
-														build();
-    
-		Log.init(logContext);
+        emailLogSendingConfiguration.addEmailRecipient("another.recipient@email.com");
+
+        LogConfiguration configuration =    LogConfiguration.LogConfigurationBuilder.newDebugConfiguration(this).
+
+                                            setLogFileFormat(LogConfiguration.LogFileFormat.XML).
+                                            addTagToFilter(TestTags.ERROR_TAG,true).
+                                            addTagToFilter(TestTags.VERBOSE_TAG, true).
+                                            setLevelFilter(Log.DEBUG).
+                                            setLogFileRotationTime(30 * 1000).
+                                            addAttachedFileToReport("/data/anr/traces.txt").
+                                            setAfterCrashAction(LogConfiguration.AfterCrashAction.RELAUNCH_APPLICATION).
+
+                                            setSendingConfiguration(emailLogSendingConfiguration).
+
+                                            putMetaData("meta-key", "meta-value").
+                                            putMetaData("meta-key", "meta-value").
+
+                                            build();
+		Log.init(configuration,this);
 	}
 }
 </code></pre>
@@ -116,7 +125,7 @@ After this you could use as usual, for example: <code>Log.i(TAG,”Message”)</
 
 **Note:** now it's need to import <code>com.logtracking.lib.api.Log</code> , instead of <code>android.util.Log</code>!
 
-For more details, you can see “AndroidLogTrackerUsageExapmle” demo application and javadoc for main API classes :  <code>LogSettings, LogContext, MetaDataCollector, OnCrashHandledListener, Log, LogUtils</code>.
+For more details, you can see “AndroidLogTrackerUsageExapmle” demo application and javadoc for main API classes :  <code>LogConfiguration, Log, LogUtils</code>.
 
 ##Bug report dialog
 For showing “bug report dialog”, you need to invoke :
@@ -124,16 +133,20 @@ For showing “bug report dialog”, you need to invoke :
 Screenshot examples of bug report dialogs : 
 ![Alt text](http://s24.postimg.org/bhsj72jgl/Untitled.png)
 <br>1. Simple bug report dialog, showed by invoking <pre><code> ReportIssueDialog.show(); </code></pre>
-2. Crash report dialog,when sending settings provided
-<br>3. Crash report dialog,without sending settings
+2. Crash report dialog, when sending configuration provided
+<br>3. Crash report dialog,without sending configuration
 
 ##Bug report sending
-At this moment library supports sending prepared bug reports by e-mail. For sending bug reports on your e-mail, you need to create and configure  EmailLogSendingSettings as was showed previously : 
+At this moment library supports sending prepared bug reports by e-mail. For sending bug reports on your e-mail, you need to create and configure  EmailLogSendingConfiguration as was showed previously : 
 
-<pre><code>LogSettings settings = LogSettings.newDebugSettings(this);
-EmailLogSendingSettings emailLogSendingSettings = new EmailLogSendingSettings("your.email@gmail.com" , "password", “report.recipient@gmail.com");
-emailLogSendingSettings.addEmailRecipient("another@email.com");
-settings.setSendingSettings(emailLogSendingSettings);
+<pre><code>EmailLogSendingConfiguration emailLogSendingConfiguration = new EmailLogSendingConfiguration(
+                                            "example.email.@gmail.com" ,
+                                            "pass",
+                                            "developer.email@gmail.com");
+
+LogConfiguration configuration = LogConfiguration.LogConfigurationBuilder.newDebugConfiguration(this).
+                                            setSendingConfiguration(emailLogSendingConfiguration).
+                                            build();
 </code></pre>
 
 By default library support “GMAIL”  host, for other email host need to set host address in 
@@ -143,11 +156,11 @@ By default library support “GMAIL”  host, for other email host need to set h
 At this moment library support only English, Russian and Ukrainian languages.
 
 ##Require permissions
-Using of library required next permissions for your application , depending of logging settings.
+Using of library required next permissions for your application , depending of logging configuration.
 
-* <code>android.permission.INTERNET</code> – required for sending reports by choses service. This permission required if you will send bug reports from application (if you set some of LogSendingSettings to LogSettings.setSendingSettings() )
+* <code>android.permission.INTERNET</code> – required for sending reports by choses service. This permission required if you will send bug reports from application.
 
-* <code>android.permission.WRITE_EXTERNAL_STORAGE</code> – required for saving log messages and bug reports on devices external storage. In case if path setted in LogSettings.setLogDirectoryName() is placed not on external storage,you could not use this permission. But it's better to use dirrectory in external storage.
+* <code>android.permission.WRITE_EXTERNAL_STORAGE</code> – required for saving log messages and bug reports on devices external storage. In case if path setted in <code>LogConfigurationBuilder.setLogDirectoryName()</code> is placed not on external storage,you could not use this permission. But it's better to use dirrectory in external storage.
 
 * <code>android.permission.READ_LOGS</code>  - required permission for reading and handling logs inside the library.
 
