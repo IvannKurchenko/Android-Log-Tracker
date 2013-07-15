@@ -1,12 +1,11 @@
 package com.logtracking.lib.internal.format;
 
-
-import com.logtracking.lib.api.config.LogConfiguration;
+import com.logtracking.lib.internal.LogContext;
 
 public class LogFileFormatterFactory {
 
-	public static LogFileFormatter getFormatter(LogConfiguration configuration){
-		switch(configuration.getLogFileFormat()){
+	public static LogFileFormatter getFormatter(LogContext logContext){
+		switch(logContext.getLogConfiguration().getLogFileFormat()){
 			case DEFAULT:
 				return new NativeLogFileFormatter();
 				
@@ -15,6 +14,9 @@ public class LogFileFormatterFactory {
 				
 			case JSON:
 				return new JsonLogFileFormatter();
+
+            case HTML:
+                return new HtmlLogFileFormatter(logContext.getApplicationContext());
 				
 			default:
 				return new NativeLogFileFormatter();

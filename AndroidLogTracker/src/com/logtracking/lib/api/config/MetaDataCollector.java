@@ -84,7 +84,7 @@ class MetaDataCollector {
 	/**
 	 * Device screen density.
 	 */
-    private static final String DEVICE_SCREEN_DENSITY_KEY = "device_screen_density_key";
+    private static final String DEVICE_SCREEN_DENSITY_KEY = "device_screen_density";
 	
 	/**
 	 * Name of current application.

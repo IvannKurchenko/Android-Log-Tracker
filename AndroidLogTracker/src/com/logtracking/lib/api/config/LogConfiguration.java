@@ -487,7 +487,12 @@ public final class LogConfiguration {
         /**
          * File in JSON format.
          */
-        JSON
+        JSON,
+
+        /**
+         * File in Html format.
+         */
+        HTML
     }
 
     /**

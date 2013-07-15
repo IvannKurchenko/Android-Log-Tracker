@@ -45,16 +45,38 @@ public class TestActivity extends Activity{
         @Override
         public void run() {
             while(!Thread.currentThread().isInterrupted()){
-                sendMessages(TestTags.ERROR_TAG);
-                sendMessages(TestTags.DEBUG_TAG);
-                sendMessages(TestTags.INFO_TAG);
-                sendMessages(TestTags.VERBOSE_TAG);
+                sendMessages(Log.ERROR,TestTags.ERROR_TAG);
+                sendMessages(Log.DEBUG,TestTags.DEBUG_TAG);
+                sendMessages(Log.INFO,TestTags.INFO_TAG);
+                sendMessages(Log.VERBOSE,TestTags.VERBOSE_TAG);
             }
         }
 
-        private void sendMessages(String tag){
-            for (int i=0;i<MESSAGE_COUNT;i++)
-                Log.v(tag, "test message # " + i);
+        private void sendMessages(int level, String tag){
+            for (int i=0;i<MESSAGE_COUNT;i++)  {
+                switch (level){
+
+                    case Log.VERBOSE:
+                        Log.v(tag, "test message # " + i);
+                        break;
+
+                    case Log.DEBUG :
+                        Log.d(tag, "test message # " + i);
+                        break;
+
+                    case Log.INFO:
+                        Log.i(tag, "test message # " + i);
+                        break;
+
+                    case Log.WARN:
+                        Log.w(tag, "test message # " + i);
+                        break;
+
+                    case Log.ERROR:
+                        Log.e(tag, "test message # " + i);
+                        break;
+                }
+            }
         }
     };
 	

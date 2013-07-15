@@ -80,7 +80,7 @@ public class LogFileManager {
 		mLogFilesDirectory = new File(mLogContext.getLogConfiguration().getLogDirectoryName());
 		String reportsDirectory = mLogContext.getLogConfiguration().getLogDirectoryName() + FILE_NAME_SEPARATOR + REPORT_DIRECTORY_NAME;
 		mReportDeprecatory = new File(reportsDirectory);
-		mFileFormatter = LogFileFormatterFactory.getFormatter(mLogContext.getLogConfiguration());
+		mFileFormatter = LogFileFormatterFactory.getFormatter(mLogContext);
 	}
 	
 	public void startLogSaving(){

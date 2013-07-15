@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Table headers-->
+    <string name="alt_html_meta_table_key">Key</string>
+    <string name="alt_html_meta_table_value">Value</string>
+
+    <string name="alt_html_logging_table_date">Date</string>
+    <string name="alt_html_logging_table_level">Level</string>
+    <string name="alt_html_logging_table_pid">Pid</string>
+    <string name="alt_html_logging_table_tid">Tid</string>
+    <string name="alt_html_logging_table_package">Package</string>
+    <string name="alt_html_logging_table_tag">Tag</string>
+    <string name="alt_html_logging_table_message">Message</string>
+
+    <!-- Html document elements-->
+    <string name="alt_html_document_open">
+        &lt;!doctype HTML public /"-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd/" &gt;
+        &lt;html&gt;
+            &lt;head&gt;
+                &lt;title&gt;AndroidLogTracker&lt;/title&gt;
+
+                &lt;style type="text/css"&gt;
+                    table.table {
+                        margin: 0 auto;
+                        border-collapse: collapse;
+                         box-shadow: 0 0 10px rgba(0,0,0,0.0);
+                        -moz-box-shadow: 0 0 10px rgba(0,0,0,0.0); 
+                        -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.5);
+                    }
+
+                    table.table th {
+                        border-width: 4px;
+                        padding: 3px;
+                        border-style: solid;
+                        border-color: #dedfde;
+                        -moz-border-radius:;
+                        white-space: nowrap;
+                        font-family:tahoma, geneva,sans-serif;
+                    }
+
+                    table.table td {
+                        border-width: 4px;
+                        padding: 3px;
+                        border-style: solid;
+                        border-color: #dedfde;
+                        white-space: nowrap;
+                        word-wrap: break-word;
+                        font-family:tahoma, geneva,sans-serif;
+                        -moz-border-radius: ;
+                    }
+
+                    .header {
+                        background: #dedfde;
+                        box-shadow: 0 0 10px rgba(0,0,0,0.0);
+                        -moz-box-shadow: 0 0 10px rgba(0,0,0,0.0); 
+                        -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.5);
+                        padding: 10px;
+                        margin-right: -10px;
+                        margin-left: -10px;
+                        margin-top: -10px;
+                   }
+
+                   .header-text{
+                       text-align: center; 
+                       font-family:tahoma,geneva,sans-serif;
+                       font-size: 40px; 
+                   }
+
+                   .message-text{
+                       font-size:20px;
+                       text-align: center; 
+                       font-family:tahoma,geneva,sans-serif;
+                   }
+
+                   .error-log{
+                       color:#ff0000;
+                   }
+
+                   .warm-log{
+                       color:#ff8c00;   
+                   }
+
+                   .info-log{
+                        color:#008000;  
+                   }
+
+                   .debug-log{
+                        color:#0000FF;  
+                   }
+
+                   .verbose-log{
+                        color:#000000;  
+                   }
+                &lt;/style&gt;
+            &lt;/head&gt;
+
+            &lt;body&gt;
+                &lt;div class="header"&gt; 
+                    &lt;h1 class="header-text"&gt;Android Log Tracker Report&lt;/h1&gt; 
+                &lt;/div&gt;
+    </string>
+
+
+    <string name="alt_html_table_class_name">table</string>
+
+    <string name="alt_html_table_open_tag">&lt;table class="%s"&gt;</string>
+    <string name="alt_html_table_close_tag">&lt;/table&gt;</string>
+
+    <string name="alt_html_table_row_open_tag">&lt;tr&gt;</string>
+    <string name="alt_html_table_row_close_tag">&lt;/tr&gt;</string>
+
+    <string name="alt_html_table_header_cell_open_tag">&lt;th&gt;</string>
+    <string name="alt_html_table_header_cell_close_tag">&lt;/th&gt;</string>
+
+    <string name="alt_html_table_cell_open_tag">&lt;td&gt;</string>
+    <string name="alt_html_table_cell_close_tag">&lt;/td&gt;</string>
+
+    <string name="alt_html_span_open_tag">&lt;span class="%s"&gt;</string>
+    <string name="alt_html_span_close_tag">&lt;/span&gt;</string>
+
+    <!-- Header text-->
+
+    <string name="alt_html_report_message">
+        &lt;h1 class="header-text"&gt;Message&lt;/h1&gt;
+        &lt;p class="message-text"&gt; %s &lt;/p&gt;
+    </string>
+
+    <string name="alt_html_meta_data_header_text">
+        &lt;h1 class="header-text"&gt;Metadata&lt;/h1&gt;
+    </string>
+
+    <string name="alt_html_logging_header_text">
+        &lt;h1 class="header-text"&gt;Logging&lt;/h1&gt;
+    </string>
+
+    <string name="alt_html_document_close">
+        &lt;/body&gt;
+        &lt;/html&gt;
+    </string>
+
+    <!-- Span log style names -->
+    <string name="alt_html_error_log">error-log</string>
+    <string name="alt_html_warm_log">warm-log</string>
+    <string name="alt_html_info_log">info-log</string>
+    <string name="alt_html_debug_log">debug-log</string>
+    <string name="alt_html_verbose_log">verbose-log</string>
+
+</resources>

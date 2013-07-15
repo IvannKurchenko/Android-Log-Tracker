@@ -50,7 +50,7 @@ public abstract class BaseLogTask extends AsyncTask <Void,Void,File> {
 		super();
 		mLogConfiguration = logContext.getLogConfiguration();
         mApplicationContext = logContext.getApplicationContext();
-		mFileFormatter = LogFileFormatterFactory.getFormatter(logContext.getLogConfiguration());
+		mFileFormatter = LogFileFormatterFactory.getFormatter(logContext);
         mPreferences = LogPreferences.getInstance(logContext.getApplicationContext());
 	}
 	
