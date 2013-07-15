@@ -117,9 +117,10 @@ Before any logging using , you should initialize log by invocation method <code>
 }
 </code></pre>
 
-And register in your AndroidManifest.xml file special activity for bug reporting:  
-<pre><code> &lt;activity android:name="com.logtracking.lib.internal.ReportIssueActivity"
+And register in your AndroidManifest.xml file special activity for issue reporting:  
+<pre><code> &lt;activity android:name="com.logtracking.lib.internal.DefaultReportIssueActivity"
             	  android:theme="@android:style/Theme.NoTitleBar"/> </code></pre>
+(for more details about activity for issue reporting, see "Bug report dialog" below )            	  
 
 After this you could use as usual, for example: <code>Log.i(TAG,”Message”)</code>
 
@@ -127,14 +128,26 @@ After this you could use as usual, for example: <code>Log.i(TAG,”Message”)</
 
 For more details, you can see “AndroidLogTrackerUsageExapmle” demo application and javadoc for main API classes :  <code>LogConfiguration, Log, LogUtils</code>.
 
-##Bug report dialog
-For showing “bug report dialog”, you need to invoke :
+##Issue report dialog
+This dialog provide possibility to send issue report about application.
+Issue report dialog showing in case of application crash or invokation of method :
 <pre><code> ReportIssueDialog.show(); </code></pre>
-Screenshot examples of bug report dialogs : 
+Recomended to create special buttom in application,like "Report about problem", where invoke described method to provide 
+for user possibility to report about problems in your application.
+See "AndroidLogTrackerUsageExapmle" as example to use.
+<br>Library provide default implementation of this dialog. Screenshot examples : 
 ![Alt text](http://s24.postimg.org/bhsj72jgl/Untitled.png)
 <br>1. Simple bug report dialog, showed by invoking <pre><code> ReportIssueDialog.show(); </code></pre>
 2. Crash report dialog, when sending configuration provided
 <br>3. Crash report dialog,without sending configuration
+
+<br>In case if you want to implement your custom issue report activity, you need to :
+* Create activity that extends from <code>ReportIssueActivity</code>.
+In this activity for sending issue report you should call <code>onSendIssueReport(String issueMessage)</code> with
+message description about problem or <code>onCancel()</code> otherwise, if "cancel" button was clicked.
+See, <code>com.logtracking.lib.internal.DefaultReportIssueActivity</code> as example of implemntation.
+* Set class of custom activity in <code>LogConfigurationBuilder.setReportIssueDialog(customReportIssueDialog)</code>
+* Of course,register this activity in your <code>AndroidManifest.xml</code> file.
 
 ##Bug report sending
 At this moment library supports sending prepared bug reports by e-mail. For sending bug reports on your e-mail, you need to create and configure  EmailLogSendingConfiguration as was showed previously : 
