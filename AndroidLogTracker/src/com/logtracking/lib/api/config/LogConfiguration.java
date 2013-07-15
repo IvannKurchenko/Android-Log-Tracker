@@ -8,8 +8,7 @@ import java.io.File;
 import java.util.*;
 
 import static com.logtracking.lib.api.Log.*;
-import static com.logtracking.lib.api.config.NonModifiableCollections.newNonModifiableList;
-import static com.logtracking.lib.api.config.NonModifiableCollections.newNonModifiableMap;
+import static java.util.Collections.*;
 
 /**
  * Class representing global configuration of logging, creating and formatting issue reports,strategies of crash handling, etc.
@@ -561,8 +560,8 @@ public final class LogConfiguration {
         mSendReportOnlyByWifi = builder.mSendReportOnlyByWifi;
         mNotifyAboutReportSendResult = builder.mNotifyAboutReportSendResult;
 
-        mApplicationPackageFilter = newNonModifiableList(builder.mApplicationPackageFilter);
-        mTagFilter =  newNonModifiableList(builder.mTagFilter);
+        mApplicationPackageFilter = unmodifiableList(builder.mApplicationPackageFilter);
+        mTagFilter =  unmodifiableList(builder.mTagFilter);
         mLevelFilter = builder.mLevelFilter;
         mFilterOnlyOwnLogRecord = builder.mFilterOnlyOwnLogRecord;
 
@@ -573,11 +572,11 @@ public final class LogConfiguration {
         mLogFileRotationType = builder.mLogFileRotationType;
         mLogFileRotationSize = builder.mLogFileRotationSize;
         mLogFileRotationTime = builder.mLogFileRotationTime;
-        mFilesAttachedToReport = newNonModifiableList(builder.mFilesAttachedToReport);
+        mFilesAttachedToReport = unmodifiableList(builder.mFilesAttachedToReport);
 
         mSendingSettings = builder.mSendingSettings;
 
-        mMetaData = newNonModifiableMap(builder.mMetaData);
+        mMetaData = unmodifiableMap(builder.mMetaData);
         mAfterCrashAction = builder.mAfterCrashAction;
     }
 
