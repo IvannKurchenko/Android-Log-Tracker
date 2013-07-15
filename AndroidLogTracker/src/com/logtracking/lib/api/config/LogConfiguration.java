@@ -3,6 +3,8 @@ package com.logtracking.lib.api.config;
 import android.content.Context;
 import android.text.TextUtils;
 import com.logtracking.lib.api.Log;
+import com.logtracking.lib.internal.DefaultReportIssueActivity;
+import com.logtracking.lib.internal.ReportIssueActivity;
 
 import java.io.File;
 import java.util.*;
@@ -161,6 +163,7 @@ public final class LogConfiguration {
          */
         private Map<String,String> mMetaData;
         private AfterCrashAction mAfterCrashAction;
+        private Class mReportDialogClass;
 
         private String mApplicationPackage;
 
@@ -174,6 +177,7 @@ public final class LogConfiguration {
             mLogFileFormat = LogFileFormat.DEFAULT;
             mApplicationPackage = applicationContext.getPackageName();
             mMetaData = new MetaDataCollector(applicationContext).getData();
+            mReportDialogClass = DefaultReportIssueActivity.class;
         }
 
         /**
@@ -252,7 +256,7 @@ public final class LogConfiguration {
          * @see Log#ASSERT
          * @return current instance.
          * @throws IllegalArgumentException if level filter is out of bound between
-         * {@link com.logtracking.lib.api.Log.VERBOSE} and {@link com.logtracking.lib.api.Log.ERROR}
+         * {@link com.logtracking.lib.api.Log#VERBOSE} and {@link com.logtracking.lib.api.Log#ERROR}
          */
         public LogConfigurationBuilder setLevelFilter(int levelFilter){
             checkArgument(levelFilter < VERBOSE || levelFilter > ASSERT, "Level filter out of bound");
@@ -419,6 +423,22 @@ public final class LogConfiguration {
         }
 
         /**
+         * Set class of custom report issue dialog. Set activity will be showed, when application
+         * will crashed or to send issue report, after calling {@link com.logtracking.lib.api.ReportIssueDialog#show()}.
+         * Custom report dialog should extends {@link com.logtracking.lib.internal.ReportIssueActivity}
+         *
+         * @param customReportIssueDialog class of custom report issue dialog.
+         * @return current instance.
+         * @throws NullPointerException if class is null.
+         * @see com.logtracking.lib.internal.ReportIssueActivity
+         */
+        public LogConfigurationBuilder setReportIssueDialog(Class<? extends ReportIssueActivity> customReportIssueDialog){
+            checkNotNull(customReportIssueDialog);
+            mReportDialogClass = customReportIssueDialog;
+            return this;
+        }
+
+        /**
          * Builds instance of {@link LogConfiguration}.
          * @return new  configured instance {@link LogConfiguration}.
          */
@@ -430,7 +450,7 @@ public final class LogConfiguration {
     /**
      *Enum representing mode of saving log messages in file.
      */
-    public enum LogSavingMode{
+    public enum LogSavingMode {
 
         /**
          * In this mode log messages will be saved in log file while application works.
@@ -554,6 +574,7 @@ public final class LogConfiguration {
      */
     private final Map<String,String> mMetaData;
     private final AfterCrashAction mAfterCrashAction;
+    private final Class mReportDialogClass;
 
     private LogConfiguration(LogConfigurationBuilder builder){
         mLoggingAvailable = builder.mLoggingAvailable;
@@ -578,6 +599,7 @@ public final class LogConfiguration {
 
         mMetaData = unmodifiableMap(builder.mMetaData);
         mAfterCrashAction = builder.mAfterCrashAction;
+        mReportDialogClass = builder.mReportDialogClass;
     }
 
     public boolean isLoggingAvailable(){
@@ -650,5 +672,9 @@ public final class LogConfiguration {
 
     public AfterCrashAction getAfterCrashAction(){
         return mAfterCrashAction;
+    }
+
+    public Class getReportDialog(){
+        return mReportDialogClass;
     }
 }

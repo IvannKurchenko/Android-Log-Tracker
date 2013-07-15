@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         
-        <activity android:name="com.logtracking.lib.internal.ReportIssueActivity"
+        <activity android:name="com.logtracking.lib.internal.DefaultReportIssueActivity"
             	  android:theme="@android:style/Theme.NoTitleBar"/>
         
     </application>

@@ -79,7 +79,7 @@ public class IssueReporter {
 
 	protected void showReportDialog(int mode){
 		mReportIssueDialogMode = mode;
-		Intent intent = new Intent(mApplicationContext , ReportIssueActivity.class);
+		Intent intent = new Intent(mApplicationContext , mLogConfiguration.getReportDialog());
 		if (mReportIssueDialogMode == SHOW_CRASH_REPORT_DIALOG){
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		}
