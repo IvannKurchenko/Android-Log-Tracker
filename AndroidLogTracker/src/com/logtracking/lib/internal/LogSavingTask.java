@@ -47,6 +47,7 @@ class LogSavingTask extends BaseLogTask {
 	
 	public void flush(){
 		try {
+            writeCrashToBuffer();
 			writeBufferToFile();
 			FileDescriptor descriptor = mRandomAccessFile.getFD();
 			descriptor.sync();

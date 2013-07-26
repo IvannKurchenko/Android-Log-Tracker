@@ -113,7 +113,7 @@ public class LogFileManager {
 			}
 			
 		} else  {
-			prepareReport(BaseLogTask.CRASH_REPORT_MESSAGE , onReportPrepareListener);
+			prepareReport(BaseLogTask.CRASH_REPORT_MESSAGE, formatCrashStackTrace(crashedThread, uncaughtException) , onReportPrepareListener);
 		}
 	}
 	
@@ -126,26 +126,17 @@ public class LogFileManager {
 		if(!isSaving()){
 			
 			if (mLogContext.getLogConfiguration().isLoggingAvailable()){
-				saveLogDump(null,BaseLogTask.CRASH_REPORT_MESSAGE,onReportPrepareListener);
+				saveLogDump(null, BaseLogTask.CRASH_REPORT_MESSAGE, onReportPrepareListener);
 			}
 			
 		} else  {
-			prepareReport(message , onReportPrepareListener);
+			prepareReport(message, null, onReportPrepareListener);
 		}
 	}
 
 	private void saveCrash(Thread thread,Throwable throwable,ReportPrepareListener onReportPrepareListener){
-		String crashStr = Log.getStackTraceString(throwable);
-		List<LogModel> crashList = new ArrayList<LogModel>();
-		String [] crashStackTrace = crashStr.split("\n");
-		
-		String packageName = mLogContext.getApplicationContext().getApplicationInfo().packageName;
-		int pid = mLogFilter.getPidByPackageName(packageName);
-
-        for (String crashStackTraceItem : crashStackTrace) {
-            crashList.add(new LogModel(pid, thread.getId(), Log.ERROR, packageName, ANDROID_RUNTIME_TAG, crashStackTraceItem));
-        }
-		saveLogDump(crashList,BaseLogTask.CRASH_REPORT_MESSAGE,onReportPrepareListener);
+		List<LogModel> crashList = formatCrashStackTrace(thread, throwable);
+		saveLogDump(crashList, BaseLogTask.CRASH_REPORT_MESSAGE, onReportPrepareListener);
 	}
 	
 	private void saveLogDump(List<LogModel> crashList,String message,ReportPrepareListener onReportPrepareListener){
@@ -158,8 +149,9 @@ public class LogFileManager {
 		dumpLogTask.startProcess();
 	}
 	
-	private void prepareReport(String reportMessage , ReportPrepareListener onReportPrepareListener){
+	private void prepareReport(String reportMessage , List<LogModel> crashList, ReportPrepareListener onReportPrepareListener){
 		mOnReportPrepareListener = onReportPrepareListener;
+        mSaveLogTask.setCrashStack(crashList);
 		mSaveLogTask.flush();
 		mSaveLogTask.setCaWriteInFile(false);
 		
@@ -171,7 +163,21 @@ public class LogFileManager {
 		
 		mPreparationTasksCount++;
 	}
-	
+
+    private List<LogModel> formatCrashStackTrace(Thread thread,Throwable throwable){
+        String crashStr = Log.getStackTraceString(throwable);
+        List<LogModel> crashList = new ArrayList<LogModel>();
+        String [] crashStackTrace = crashStr.split("\n");
+
+        String packageName = mLogContext.getApplicationContext().getApplicationInfo().packageName;
+        int pid = mLogFilter.getPidByPackageName(packageName);
+
+        for (String crashStackTraceItem : crashStackTrace) {
+            crashList.add(new LogModel(pid, thread.getId(), Log.ERROR, packageName, ANDROID_RUNTIME_TAG, crashStackTraceItem));
+        }
+        return crashList;
+    }
+
 	private File getReportFileName(){
 		return new File(mReportDeprecatory.getAbsolutePath() +
 						FILE_NAME_SEPARATOR + 
