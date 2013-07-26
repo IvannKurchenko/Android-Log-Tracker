@@ -95,7 +95,7 @@ public final class Log {
      * @param msg The message you would like logged.
      */
 	public static int d(String tag, String msg){
-		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.d(LIBRARY_FILTER_TAG + tag , msg) : -1;
+		return sLogConfiguration.getMinimumLoggingLevelAvailable() < DEBUG ? android.util.Log.d(LIBRARY_FILTER_TAG + tag , msg) : -1;
 	}
 	
 	/**
@@ -107,7 +107,7 @@ public final class Log {
      */
 	
 	public static int d(String tag, String msg ,Throwable tr){
-		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.d(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
+		return sLogConfiguration.getMinimumLoggingLevelAvailable() < DEBUG ? android.util.Log.d(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
 	}
 	
 	/**
@@ -117,7 +117,7 @@ public final class Log {
      * @param msg The message you would like logged.
      */
 	public static int e(String tag, String msg ){
-		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.e(LIBRARY_FILTER_TAG + tag , msg ) : -1;
+		return sLogConfiguration.getMinimumLoggingLevelAvailable() < ERROR ? android.util.Log.e(LIBRARY_FILTER_TAG + tag , msg ) : -1;
 	}
 	
 	/**
@@ -128,7 +128,7 @@ public final class Log {
      * @param tr An exception to log
      */
 	public static int e(String tag, String msg ,Throwable tr){
-		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.e(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
+		return sLogConfiguration.getMinimumLoggingLevelAvailable() < ERROR ? android.util.Log.e(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
 	}
 	
 	/**
@@ -138,7 +138,7 @@ public final class Log {
      * @param msg The message you would like logged.
      */
 	public static int i(String tag, String msg ){
-		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.i(LIBRARY_FILTER_TAG + tag , msg ) : -1;
+		return sLogConfiguration.getMinimumLoggingLevelAvailable() < INFO ? android.util.Log.i(LIBRARY_FILTER_TAG + tag , msg ) : -1;
 	}
 	
 	/**
@@ -149,7 +149,7 @@ public final class Log {
      * @param tr An exception to log
      */
 	public static int i(String tag, String msg ,Throwable tr){
-		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.i(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
+		return sLogConfiguration.getMinimumLoggingLevelAvailable() < INFO ? android.util.Log.i(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
 	}
 	
 	/**
@@ -161,7 +161,7 @@ public final class Log {
      */
 	
 	public static int v(String tag, String msg ){
-		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.v(LIBRARY_FILTER_TAG + tag , msg ) : -1;
+		return sLogConfiguration.getMinimumLoggingLevelAvailable() < VERBOSE ? android.util.Log.v(LIBRARY_FILTER_TAG + tag , msg ) : -1;
 	}
 	
 	/**
@@ -172,7 +172,7 @@ public final class Log {
      * @param tr An exception to log
      */
 	public static int v(String tag, String msg ,Throwable tr){
-		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.v(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
+		return sLogConfiguration.getMinimumLoggingLevelAvailable() < VERBOSE ? android.util.Log.v(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
 	}
 
 	 /**
@@ -182,7 +182,7 @@ public final class Log {
      * @param msg The message you would like logged.
      */
 	public static int w(String tag, String msg ){
-		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.w(LIBRARY_FILTER_TAG + tag , msg ) : -1;
+		return sLogConfiguration.getMinimumLoggingLevelAvailable() < WARN ? android.util.Log.w(LIBRARY_FILTER_TAG + tag , msg ) : -1;
 	}
 
     /**
@@ -192,7 +192,7 @@ public final class Log {
      * @param tr An exception to log
      */
 	public static int w(String tag,Throwable tr){
-		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.w(LIBRARY_FILTER_TAG + tag , tr) : -1;
+		return sLogConfiguration.getMinimumLoggingLevelAvailable() < WARN ? android.util.Log.w(LIBRARY_FILTER_TAG + tag , tr) : -1;
 	}
 	
 	/**
@@ -203,7 +203,7 @@ public final class Log {
      * @param tr An exception to log
      */
 	public static int w(String tag, String msg ,Throwable tr){
-		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.w(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
+		return sLogConfiguration.getMinimumLoggingLevelAvailable() < WARN ? android.util.Log.w(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
 	}
 
 
@@ -218,7 +218,7 @@ public final class Log {
      * @param msg The message you would like logged.
      */
 	public static int wtf(String tag, String msg ){
-		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.wtf(LIBRARY_FILTER_TAG + tag , msg ) : -1;
+		return sLogConfiguration.getMinimumLoggingLevelAvailable() < ERROR ? android.util.Log.wtf(LIBRARY_FILTER_TAG + tag , msg ) : -1;
 	}
 
     /**
@@ -229,7 +229,7 @@ public final class Log {
      * @param tr An exception to log.
      */
 	public static int wtf(String tag,Throwable tr){
-		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.wtf(LIBRARY_FILTER_TAG + tag , tr) : -1;
+		return sLogConfiguration.getMinimumLoggingLevelAvailable() < ERROR ? android.util.Log.wtf(LIBRARY_FILTER_TAG + tag , tr) : -1;
 	}
 
     /**
@@ -241,7 +241,7 @@ public final class Log {
      * @param tr An exception to log.  May be null.
      */
 	public static int wtf(String tag, String msg ,Throwable tr){
-		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.wtf(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
+		return sLogConfiguration.getMinimumLoggingLevelAvailable() < ERROR ? android.util.Log.wtf(LIBRARY_FILTER_TAG + tag , msg , tr) : -1;
 	}
 	
 	/**
@@ -253,7 +253,7 @@ public final class Log {
      * @return The number of bytes written.
      */
 	public static int println(int priority,String tag, String msg){
-		return sLogConfiguration.isLoggingAvailable() ? android.util.Log.println(priority, tag, msg) : -1;
+		return sLogConfiguration.getMinimumLoggingLevelAvailable() < priority ? android.util.Log.println(priority, tag, msg) : -1;
 	}
 	
 	 /**
@@ -276,7 +276,7 @@ public final class Log {
      * @throws IllegalArgumentException is thrown if the tag.length() > 23.
      */
 	public static boolean isLoggable(String tag , int level){
-		return sLogConfiguration.isLoggingAvailable() && android.util.Log.isLoggable(tag, level);
+		return sLogConfiguration.getMinimumLoggingLevelAvailable() < level && android.util.Log.isLoggable(tag, level);
 	}
 	
 	 /**
@@ -474,7 +474,7 @@ public final class Log {
 	 * @return array of two elements - first - class name , second - method name and code line number 
 	 */
 	private static String[] getLocation() {
-		if(!sLogConfiguration.isLoggingAvailable())
+		if(!sLogConfiguration.isAnyLoggingAvailable())
 			return EMPTY_LOCATION;
 		
 		String[] location = {LIBRARY_FILTER_TAG,""};

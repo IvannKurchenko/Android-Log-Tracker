@@ -59,7 +59,7 @@ public final class LogConfiguration {
 
             debugBuilder.mNotifyAboutReportSendResult = true;
 
-            debugBuilder.mLoggingAvailable = true;
+            debugBuilder.mMinLoggingLevelAvailable = Log.VERBOSE;
             debugBuilder.mLogSavingMode = LogSavingMode.SAVE_ALL_LOG_IN_FILE;
 
             debugBuilder.mLevelFilter = android.util.Log.VERBOSE;
@@ -97,7 +97,7 @@ public final class LogConfiguration {
 
             productionSettings.mNotifyAboutReportSendResult = false;
 
-            productionSettings.mLoggingAvailable = false;
+            productionSettings.mMinLoggingLevelAvailable = Log.ERROR;
             productionSettings.mLogSavingMode = LogSavingMode.SAVE_ONLY_IF_NEEDED;
             productionSettings.mFilterOnlyOwnLogRecord = true;
 
@@ -108,6 +108,10 @@ public final class LogConfiguration {
             productionSettings.mLogFileRotationTime = -1;
 
             return productionSettings;
+        }
+
+        private static void checkLoggingLevel(int logLevel){
+            checkArgument(logLevel < VERBOSE || logLevel > ASSERT, "Level filter out of bound");
         }
 
         private static void checkNotNull(Object object){
@@ -129,7 +133,7 @@ public final class LogConfiguration {
         /*
          * General config
          */
-        private boolean mLoggingAvailable;
+        private int mMinLoggingLevelAvailable;
         private boolean mSendReportOnlyByWifi;
         private boolean mNotifyAboutReportSendResult;
 
@@ -181,17 +185,20 @@ public final class LogConfiguration {
         }
 
         /**
-         * Turn on or off passing  all log messages in log using
+         * Set minimum level of log messages that should be send to system log using
          * {@link com.logtracking.lib.api.Log},
          * {@link com.logtracking.lib.api.LogUtils}.
          *
          * @see com.logtracking.lib.api.Log
          * @see com.logtracking.lib.api.LogUtils
-         * @param loggingAvailable available passing log messages through {@link com.logtracking.lib.api.Log}.
+         * @param minLoggingLevelAvailable minimum level of log messages that should be send to  system log.
+         * @throws IllegalArgumentException if level filter is out of bound between
+         * {@link com.logtracking.lib.api.Log#VERBOSE} and {@link com.logtracking.lib.api.Log#ERROR}
          * @return current instance.
          */
-        public LogConfigurationBuilder setLogginAvaliable(boolean loggingAvailable){
-            this.mLoggingAvailable = loggingAvailable;
+        public LogConfigurationBuilder setMinimumLoggingLevelAvaliable(int minLoggingLevelAvailable){
+            checkLoggingLevel(minLoggingLevelAvailable);
+            mMinLoggingLevelAvailable = minLoggingLevelAvailable;
             return this;
         }
 
@@ -259,7 +266,7 @@ public final class LogConfiguration {
          * {@link com.logtracking.lib.api.Log#VERBOSE} and {@link com.logtracking.lib.api.Log#ERROR}
          */
         public LogConfigurationBuilder setLevelFilter(int levelFilter){
-            checkArgument(levelFilter < VERBOSE || levelFilter > ASSERT, "Level filter out of bound");
+            checkLoggingLevel(levelFilter);
             mLevelFilter = levelFilter;
             return this;
         }
@@ -545,7 +552,7 @@ public final class LogConfiguration {
     /*
      * General config
      */
-    private final boolean mLoggingAvailable;
+    private final int mMinLoggingLevelAvailable;
     private final boolean mSendReportOnlyByWifi;
     private final boolean mNotifyAboutReportSendResult;
 
@@ -582,7 +589,7 @@ public final class LogConfiguration {
     private final Class mReportDialogClass;
 
     private LogConfiguration(LogConfigurationBuilder builder){
-        mLoggingAvailable = builder.mLoggingAvailable;
+        mMinLoggingLevelAvailable = builder.mMinLoggingLevelAvailable;
         mSendReportOnlyByWifi = builder.mSendReportOnlyByWifi;
         mNotifyAboutReportSendResult = builder.mNotifyAboutReportSendResult;
 
@@ -607,8 +614,12 @@ public final class LogConfiguration {
         mReportDialogClass = builder.mReportDialogClass;
     }
 
-    public boolean isLoggingAvailable(){
-        return mLoggingAvailable;
+    public int getMinimumLoggingLevelAvailable(){
+        return mMinLoggingLevelAvailable;
+    }
+
+    public boolean isAnyLoggingAvailable(){
+        return mMinLoggingLevelAvailable < Log.ASSERT;
     }
 
     public boolean isSendReportOnlyByWifi(){

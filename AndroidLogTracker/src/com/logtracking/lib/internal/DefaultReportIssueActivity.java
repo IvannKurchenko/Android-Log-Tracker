@@ -93,7 +93,7 @@ public class DefaultReportIssueActivity extends ReportIssueActivity {
 	
 	private void sendIssueReport(){
 		String reportMessage = mMessageEditText.getText().toString();
-		if (getMode() == SHOW_ISSUE_REPORT_DIALOG && !TextUtils.isEmpty(reportMessage)){
+		if (getMode() == SHOW_ISSUE_REPORT_DIALOG && TextUtils.isEmpty(reportMessage)){
             showToast(R.string.alt_toast_message_could_be_empty);
             return;
 		}

@@ -61,7 +61,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 	}
 	
 	private void printStackTrace(){
-		if (mLogConfiguration.isLoggingAvailable()){
+		if (mLogConfiguration.isAnyLoggingAvailable()){
             mUncaughtException.printStackTrace();
 		}
 	}

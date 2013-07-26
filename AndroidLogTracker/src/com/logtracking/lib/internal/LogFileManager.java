@@ -106,7 +106,7 @@ public class LogFileManager {
 		
 		if(!isSaving()){
 			
-			if (mLogContext.getLogConfiguration().isLoggingAvailable()){
+			if (mLogContext.getLogConfiguration().isAnyLoggingAvailable()){
 				saveLogDump(null,BaseLogTask.CRASH_REPORT_MESSAGE,onReportPrepareListener);
 			} else {
 				saveCrash(crashedThread, uncaughtException, onReportPrepareListener);
@@ -125,7 +125,7 @@ public class LogFileManager {
 		
 		if(!isSaving()){
 			
-			if (mLogContext.getLogConfiguration().isLoggingAvailable()){
+			if (mLogContext.getLogConfiguration().isAnyLoggingAvailable()){
 				saveLogDump(null, BaseLogTask.CRASH_REPORT_MESSAGE, onReportPrepareListener);
 			}
 			
