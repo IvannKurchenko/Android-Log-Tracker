@@ -68,7 +68,7 @@ logging:
 }</code> </pre>
 
 - **HTML**
-![Alt text](http://s21.postimg.org/nmhb0edpy/Screenshot_at_2013_07_15_18_36_04.jpg)
+![Alt text](http://img21.imageshack.us/img21/3596/q9rv.png)
 
 Set appropriate format you can using method <code>setLogFileFormat</code> in <code>LogConfigurationBuilder</code> class. 
 
