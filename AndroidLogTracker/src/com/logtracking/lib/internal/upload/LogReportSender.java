@@ -8,8 +8,8 @@ import com.logtracking.lib.internal.IssueReport;
 public abstract class LogReportSender {
 	
 	public interface OnFileSendListener {
-		public void onFileSendSuccess(File file);
-		public void onFileSendFail(File file);
+		public void onFileSendSuccess(IssueReport issueReport);
+		public void onFileSendFail(IssueReport issueReport);
 	}
 
     protected static final int MAX_SEND_RETRIES = 3;
@@ -33,7 +33,7 @@ public abstract class LogReportSender {
 
     protected final boolean checkSendPossibility(IssueReport issueReport){
         if(!ConnectionChecker.isNetworkConnected(mLogContext)){
-            mListener.onFileSendFail(issueReport.getReportFile());
+            mListener.onFileSendFail(issueReport);
             return false;
         }
         return true;
@@ -41,13 +41,13 @@ public abstract class LogReportSender {
 
     protected final void notifyReportSendSuccess(IssueReport issueReport){
         if (mListener != null){
-            mListener.onFileSendSuccess(issueReport.getReportFile());
+            mListener.onFileSendSuccess(issueReport);
         }
     }
 
     protected final void notifyReportSendFail(IssueReport issueReport){
         if (mListener != null){
-            mListener.onFileSendFail(issueReport.getReportFile());
+            mListener.onFileSendFail(issueReport);
         }
     }
 

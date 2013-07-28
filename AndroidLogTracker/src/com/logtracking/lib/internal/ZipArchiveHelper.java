@@ -1,9 +1,7 @@
 package com.logtracking.lib.internal;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -24,12 +22,24 @@ class ZipArchiveHelper {
 
     public void packFiles(List<File> files) throws IOException {
         ZipOutputStream zipOutput = new ZipOutputStream(new FileOutputStream(mArchiveFile));
+        packFiles(files,zipOutput);
+        zipOutput.close();
+    }
+
+    private void packFiles(List<File> files, ZipOutputStream zipOutput) throws IOException {
         for (File file : files) {
+
+            if (!file.exists())
+                continue;
+
+            if(file.isDirectory()){
+                packFiles(Arrays.asList(file.listFiles()),zipOutput);
+                continue;
+            }
 
             FileInputStream fileInput = null;
             try {
-                if (!file.exists())
-                    continue;
+
 
                 fileInput = new FileInputStream(file);
                 zipOutput.putNextEntry(new ZipEntry(file.getName()));
@@ -46,7 +56,5 @@ class ZipArchiveHelper {
             }
 
         }
-        zipOutput.close();
     }
-
 }

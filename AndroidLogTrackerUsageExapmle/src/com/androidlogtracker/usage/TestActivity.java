@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import com.logtracking.lib.api.ReportIssueDialog;
+import com.logtracking.lib.api.SnapshotSaver;
 
 public class TestActivity extends Activity{
 
 	private OnClickListener sendLogClickListener = new  OnClickListener(){
 		@Override
 		public void onClick(View v) {
+
 			if (mLogThread!=null && mLogThread.isAlive()){
 				stopSendingLogMessages();
 				mSendLogMessageButton.setText(R.string.start_send_messages);
@@ -26,7 +28,7 @@ public class TestActivity extends Activity{
 	
 	private OnClickListener reportIssueClickListener = new OnClickListener() {
 		@Override
-		public void onClick(View arg0) {
+		public void onClick(View v) {
             ReportIssueDialog.show();
 		}
 	};
@@ -37,6 +39,13 @@ public class TestActivity extends Activity{
 			throw new TestException("Test exception");		
 		}
 	};
+
+    private OnClickListener takeSnapshotClickListener = new  OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            SnapshotSaver.saveSnapshot(TestActivity.this);
+        }
+    };
 
     private Runnable printLogsAction = new Runnable() {
 
@@ -96,6 +105,9 @@ public class TestActivity extends Activity{
 		
 		Button reportIssueButton = (Button) findViewById(R.id.reportButton);
 		reportIssueButton.setOnClickListener(reportIssueClickListener);
+
+        Button takeSnapshotButton = (Button) findViewById(R.id.takeSnapshotButton);
+        takeSnapshotButton.setOnClickListener(takeSnapshotClickListener);
 	}
 
 	private void startSendingLogMessages(){

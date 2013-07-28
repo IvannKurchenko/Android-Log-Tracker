@@ -1,6 +1,7 @@
 package com.logtracking.lib.api.config;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import com.logtracking.lib.api.Log;
 import com.logtracking.lib.internal.DefaultReportIssueActivity;
@@ -30,6 +31,8 @@ public final class LogConfiguration {
 
         private static final String LOG_FILES_DIRECTORY = "log" + FILE_NAME_SEPARATOR;
 
+        private static final String SNAPSHOT_DIRECTORY = "snapshot" + FILE_NAME_SEPARATOR;
+
         private static final String DEFAULT_LOG_FILE_NAME = "alt";
 
         private static final long DEFAULT_LOG_FILE_ROTATION_SIZE = 1 * 1000 * 1024;
@@ -55,21 +58,23 @@ public final class LogConfiguration {
         public static LogConfigurationBuilder newDebugConfiguration(Context context){
             checkNotNull(context);
 
-            LogConfigurationBuilder debugBuilder = new LogConfigurationBuilder(context);
+            LogConfigurationBuilder debugConfigBuilder = new LogConfigurationBuilder(context);
 
-            debugBuilder.mNotifyAboutReportSendResult = true;
+            debugConfigBuilder.mNotifyAboutReportSendResult = true;
 
-            debugBuilder.mMinLoggingLevelAvailable = Log.VERBOSE;
-            debugBuilder.mLogSavingMode = LogSavingMode.SAVE_ALL_LOG_IN_FILE;
+            debugConfigBuilder.mMinLoggingLevelAvailable = Log.VERBOSE;
+            debugConfigBuilder.mLogSavingMode = LogSavingMode.SAVE_ALL_LOG_IN_FILE;
 
-            debugBuilder.mLevelFilter = android.util.Log.VERBOSE;
-            debugBuilder.mFilterOnlyOwnLogRecord = false;
+            debugConfigBuilder.mLevelFilter = android.util.Log.VERBOSE;
+            debugConfigBuilder.mFilterOnlyOwnLogRecord = false;
 
-            debugBuilder.mLogFileRotationType = LogFileRotationType.ROTATION_BY_SIZE;
-            debugBuilder.mLogFileRotationSize = DEFAULT_LOG_FILE_ROTATION_SIZE;
-            debugBuilder.mLogFileRotationTime = -1;
+            debugConfigBuilder.mLogFileRotationType = LogFileRotationType.ROTATION_BY_SIZE;
+            debugConfigBuilder.mLogFileRotationSize = DEFAULT_LOG_FILE_ROTATION_SIZE;
+            debugConfigBuilder.mLogFileRotationTime = -1;
 
-            return debugBuilder;
+            debugConfigBuilder.mSnapshotSavingEnable = true;
+
+            return debugConfigBuilder;
         }
 
         /**
@@ -93,21 +98,23 @@ public final class LogConfiguration {
         public static LogConfigurationBuilder newProductionConfiguration(Context context){
             checkNotNull(context);
 
-            LogConfigurationBuilder productionSettings = new LogConfigurationBuilder(context);
+            LogConfigurationBuilder productionConfigBuilder = new LogConfigurationBuilder(context);
 
-            productionSettings.mNotifyAboutReportSendResult = false;
+            productionConfigBuilder.mNotifyAboutReportSendResult = false;
 
-            productionSettings.mMinLoggingLevelAvailable = Log.ERROR;
-            productionSettings.mLogSavingMode = LogSavingMode.SAVE_ONLY_IF_NEEDED;
-            productionSettings.mFilterOnlyOwnLogRecord = true;
+            productionConfigBuilder.mMinLoggingLevelAvailable = Log.ERROR;
+            productionConfigBuilder.mLogSavingMode = LogSavingMode.SAVE_ONLY_IF_NEEDED;
+            productionConfigBuilder.mFilterOnlyOwnLogRecord = true;
 
-            productionSettings.setSendReportOnlyByWifi(true);
+            productionConfigBuilder.setSendReportOnlyByWifi(true);
 
-            productionSettings.mLogFileRotationType = LogFileRotationType.NONE;
-            productionSettings.mLogFileRotationSize = -1;
-            productionSettings.mLogFileRotationTime = -1;
+            productionConfigBuilder.mLogFileRotationType = LogFileRotationType.NONE;
+            productionConfigBuilder.mLogFileRotationSize = -1;
+            productionConfigBuilder.mLogFileRotationTime = -1;
 
-            return productionSettings;
+            productionConfigBuilder.mSnapshotSavingEnable = false;
+
+            return productionConfigBuilder;
         }
 
         private static void checkLoggingLevel(int logLevel){
@@ -150,6 +157,7 @@ public final class LogConfiguration {
          */
         private LogSavingMode mLogSavingMode;
         private String mLogDirectoryName;
+        private String mSnapshotDirectoryName;
         private String  mLogFileName;
         private LogFileFormat mLogFileFormat;
         private LogFileRotationType mLogFileRotationType;
@@ -161,6 +169,13 @@ public final class LogConfiguration {
          * Sending config
          */
         private LogSendingConfiguration mSendingSettings;
+
+        /*
+         * Snapshot config
+         */
+        private boolean mSnapshotSavingEnable;
+        private Bitmap.CompressFormat mSnapshotFormat;
+        private int mSnapshotQuality;
 
         /*
          * Additional
@@ -177,8 +192,12 @@ public final class LogConfiguration {
                             applicationContext.getFilesDir().getAbsoluteFile();
 
             mLogDirectoryName = appDir.getPath()  + FILE_NAME_SEPARATOR + LOG_FILES_DIRECTORY;
+            mSnapshotDirectoryName = appDir.getPath() + FILE_NAME_SEPARATOR + SNAPSHOT_DIRECTORY;
+            mFilesAttachedToReport.add(mSnapshotDirectoryName);
             mLogFileName = mLogDirectoryName + FILE_NAME_SEPARATOR + DEFAULT_LOG_FILE_NAME;
             mLogFileFormat = LogFileFormat.DEFAULT;
+            mSnapshotFormat = Bitmap.CompressFormat.PNG;
+            mSnapshotQuality = 100;
             mApplicationPackage = applicationContext.getPackageName();
             mMetaData = new MetaDataCollector(applicationContext).getData();
             mReportDialogClass = DefaultReportIssueActivity.class;
@@ -400,6 +419,45 @@ public final class LogConfiguration {
             return this;
         }
 
+        /**
+         * Set enabling or disabling saving of snapshots through using {@link com.logtracking.lib.api.SnapshotSaver}
+         * @param snapshotSavingEnable enabling or disabling saving of snapshots.
+         * @return current instance.
+         * @see com.logtracking.lib.api.SnapshotSaver
+         */
+        public LogConfigurationBuilder setSnapshotSavingEnable(boolean snapshotSavingEnable){
+            mSnapshotSavingEnable = snapshotSavingEnable;
+            return this;
+        }
+
+        /**
+         * Set the format of the snapshot image. Used for bitmap compressing.
+         * @param format format of the snapshot image.
+         * @throws NullPointerException if format is null.
+         * @return current instance.
+         * @see com.logtracking.lib.api.SnapshotSaver
+         * @see Bitmap#compress(android.graphics.Bitmap.CompressFormat, int, java.io.OutputStream)
+         */
+        public LogConfigurationBuilder setSnapshotFormat(Bitmap.CompressFormat format){
+            checkNotNull(format);
+            mSnapshotFormat = format;
+            return this;
+        }
+
+        /**
+         * Set the quality of snapshot image. Used for bitmap compressing.
+         * @param quality quality of snapshot image.
+         * @throws IllegalArgumentException if quality value out of bound 0-100.
+         * @return current instance.
+         * @see com.logtracking.lib.api.SnapshotSaver
+         * @see Bitmap#compress(android.graphics.Bitmap.CompressFormat, int, java.io.OutputStream)
+         *
+         */
+        public LogConfigurationBuilder setSnapshotQuality(int quality){
+            checkArgument(quality<0 || quality>100,"Quality value should be between 0 and 100!");
+            mSnapshotQuality = quality;
+            return this;
+        }
 
         /**
          * Put new meta-data in key-value format that will be saved in issue report.
@@ -569,6 +627,7 @@ public final class LogConfiguration {
      */
     private final LogSavingMode mLogSavingMode;
     private final String mLogDirectoryName;
+    private final String mSnapshotDirectoryName;
     private final String mLogFileName;
     private final LogFileFormat mLogFileFormat;
     private final LogFileRotationType mLogFileRotationType;
@@ -580,6 +639,13 @@ public final class LogConfiguration {
      * Sending config
      */
     private final LogSendingConfiguration mSendingSettings;
+
+    /*
+     * Snapshot config
+     */
+    private final boolean mSnapshotSavingEnable;
+    private final Bitmap.CompressFormat mSnapshotFormat;
+    private final int mSnapshotQuality;
 
     /*
      * Additional
@@ -600,6 +666,7 @@ public final class LogConfiguration {
 
         mLogSavingMode = builder.mLogSavingMode;
         mLogDirectoryName = builder.mLogDirectoryName;
+        mSnapshotDirectoryName = builder.mSnapshotDirectoryName;
         mLogFileName =  builder.mLogFileName;
         mLogFileFormat = builder.mLogFileFormat;
         mLogFileRotationType = builder.mLogFileRotationType;
@@ -608,6 +675,10 @@ public final class LogConfiguration {
         mFilesAttachedToReport = unmodifiableList(builder.mFilesAttachedToReport);
 
         mSendingSettings = builder.mSendingSettings;
+
+        mSnapshotSavingEnable = builder.mSnapshotSavingEnable;
+        mSnapshotFormat = builder.mSnapshotFormat;
+        mSnapshotQuality = builder.mSnapshotQuality;
 
         mMetaData = unmodifiableMap(builder.mMetaData);
         mAfterCrashAction = builder.mAfterCrashAction;
@@ -654,6 +725,10 @@ public final class LogConfiguration {
         return mLogDirectoryName;
     }
 
+    public String getSnapshotDirectoryName(){
+        return mSnapshotDirectoryName;
+    }
+
     public String getLogFileName(){
         return mLogFileName;
     }
@@ -680,6 +755,18 @@ public final class LogConfiguration {
 
     public LogSendingConfiguration getSendingSettings(){
         return mSendingSettings;
+    }
+
+    public boolean isSnapshotSavingEnable(){
+        return mSnapshotSavingEnable;
+    }
+
+    public Bitmap.CompressFormat getSnapshotFormat(){
+        return mSnapshotFormat;
+    }
+
+    public int getSnapshotQuality(){
+        return mSnapshotQuality;
     }
 
     public Map<String,String> getMetaData(){

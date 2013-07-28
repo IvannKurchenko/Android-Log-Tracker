@@ -9,7 +9,7 @@ public class FakeIssueReporter extends IssueReporter{
     private boolean crashListenerNotified;
 
     public FakeIssueReporter(LogContext logContext) {
-        super(logContext, null);
+        super(logContext, null, null);
     }
 
     @Override

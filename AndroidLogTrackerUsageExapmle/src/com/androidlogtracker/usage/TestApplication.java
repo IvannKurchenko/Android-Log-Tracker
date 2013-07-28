@@ -1,5 +1,6 @@
 package com.androidlogtracker.usage;
 
+import android.graphics.Bitmap;
 import com.logtracking.lib.api.Log;
 import com.logtracking.lib.api.config.EmailLogSendingConfiguration;
 import com.logtracking.lib.api.config.LogConfiguration;
@@ -35,6 +36,9 @@ public class TestApplication extends Application{
                                             setAfterCrashAction(LogConfiguration.AfterCrashAction.CLOSE_APPLICATION).
 
                                             setSendingSettings(emailLogSendingSettings).
+
+                                            setSnapshotFormat(Bitmap.CompressFormat.PNG).
+                                            setSnapshotQuality(50).
 
                                             putMetaData("meta-key", "meta-value").
                                             putMetaData("meta-key", "meta-value").

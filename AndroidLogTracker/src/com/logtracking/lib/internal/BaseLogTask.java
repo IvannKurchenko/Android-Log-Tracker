@@ -131,9 +131,7 @@ public abstract class BaseLogTask extends AsyncTask <Void,Void,File> {
 		reader.close();
 		return logFileIsEmpty;
 	}
-	
-	
-	
+
 	private void writeReportMessage() throws IOException{
 		if (!TextUtils.isEmpty(mReportMessage)){
 			writeLineToFile(mFileFormatter.formatMessage(mReportMessage));

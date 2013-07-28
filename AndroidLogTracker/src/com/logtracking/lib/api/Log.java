@@ -77,11 +77,15 @@ public final class Log {
 			LogFileManager logFileManager = new LogFileManager(logContext);
 			logFileManager.startLogSaving();
 
-            IssueReporter issueReporter = new IssueReporter(logContext,logFileManager);
+            SnapshotHelper snapshotHelper = new SnapshotHelper(logConfiguration);
+
+            IssueReporter issueReporter = new IssueReporter(logContext,logFileManager,snapshotHelper);
 
 			Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(logContext, issueReporter));
 
             ReportIssueDialog.init(issueReporter);
+
+            SnapshotSaver.init(snapshotHelper);
 
 			StateHolder.init(logFileManager, issueReporter);
 		}

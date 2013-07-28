@@ -45,7 +45,7 @@ public class IssueReporter {
 	private Throwable mUncaughtException;
 	private int mReportIssueDialogMode;
 	
-	public IssueReporter(LogContext logContext , LogFileManager fileManager) {
+	public IssueReporter(LogContext logContext , LogFileManager fileManager, SnapshotHelper snapshotHelper) {
 		mApplicationContext = logContext.getApplicationContext();
         mLogConfiguration = logContext.getLogConfiguration();
         mLogFileManager = fileManager;
@@ -54,7 +54,7 @@ public class IssueReporter {
 
         if(isSendingSupport()){
             mLogFileSender = LogFileSenderFactory.newSender(logContext);
-            mLogFileSender.setListener(new LogFileUploadHandler(mNotifier));
+            mLogFileSender.setListener(new LogFileUploadHandler(mNotifier, snapshotHelper));
         }
 	}
 

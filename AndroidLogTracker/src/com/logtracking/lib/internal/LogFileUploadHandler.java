@@ -7,20 +7,23 @@ import com.logtracking.lib.internal.upload.LogReportSender;
 class LogFileUploadHandler implements LogReportSender.OnFileSendListener {
 
 	private AndroidNotifier mNotifier;
-	
-	public LogFileUploadHandler(AndroidNotifier notifier) {
+	private SnapshotHelper mSnapshotHelper;
+
+	public LogFileUploadHandler(AndroidNotifier notifier, SnapshotHelper snapshotHelper) {
         mNotifier = notifier;
+        mSnapshotHelper = snapshotHelper;
 	}
 	
 	@Override
-	public void onFileSendSuccess(File file) {
+	public void onFileSendSuccess(IssueReport issueReport) {
         mNotifier.sendSuccessUploadNotification();
-		file.delete();
+        issueReport.getReportFile().delete();
+        mSnapshotHelper.removeSnapshots();
 	}
 	
 	@Override
-	public void onFileSendFail(File file) {
+	public void onFileSendFail(IssueReport issueReport) {
         mNotifier.sendFailUploadNotification();
-		file.delete();
+        issueReport.getReportFile().delete();
 	}
 }
