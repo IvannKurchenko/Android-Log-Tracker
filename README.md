@@ -168,6 +168,14 @@ LogConfiguration configuration = LogConfiguration.LogConfigurationBuilder.newDeb
 By default library support “GMAIL”  host, for other email host need to set host address in 
 <code>setEmailHost(String emailHost)</code>. 
 
+##Snapshot saving
+For describing about some UI application issues library provide functionality for saving snapshots of your application.
+To take and save snapshot of currently visible screen of application you should use static methods of 
+<code>SnapshotSaver</code> class. For example :
+<br><code>SnapshotSaver.saveSnapshot("SnapshotName",CurrentActivity.this);</code>
+<br>Given name of snapshot is name of snapshot file. Saved snapshots will be attached to issue reports with other files.
+For more details about configuring and saving snapshot see javadoc of <code>SnapshotSaver</code> class.
+
 ##Languages support
 At this moment library support only English, Russian and Ukrainian languages.
 
