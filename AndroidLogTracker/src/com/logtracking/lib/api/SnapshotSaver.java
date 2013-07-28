@@ -7,9 +7,14 @@ import com.logtracking.lib.api.config.LogConfiguration;
 import com.logtracking.lib.internal.SnapshotHelper;
 
 /**
- * Util class for taking and saving of snapshots of current visible screen.
+ * Util class for taking and saving snapshots of current visible screen.
  * Taken snapshot will be saved in file with given name.
  * Saved snapshots will be attached to issue report with other files.
+ * Note: if snapshot with given name already exist it will be override.
+ *
+ * @see LogConfiguration.LogConfigurationBuilder#setSnapshotSavingEnable(boolean)
+ * @see LogConfiguration.LogConfigurationBuilder#setSnapshotQuality(int)
+ * @see LogConfiguration.LogConfigurationBuilder#setSnapshotFormat(android.graphics.Bitmap.CompressFormat)
  */
 public class SnapshotSaver {
 
@@ -22,6 +27,7 @@ public class SnapshotSaver {
     /**
      * Save snapshot of current visible {@link android.app.Activity} with name
      * of this {@link android.app.Activity} class.
+     *
      * @param currentActivity current visible {@link android.app.Activity}.
      */
     public static void saveSnapshot(Activity currentActivity){
@@ -30,6 +36,7 @@ public class SnapshotSaver {
 
     /**
      * Save snapshot of current visible {@link android.app.Activity} with given name.
+     *
      * @param name name of snapshot.
      * @param currentActivity current visible {@link android.app.Activity}
      */
@@ -39,6 +46,7 @@ public class SnapshotSaver {
 
     /**
      * Save snapshot of current visible {@link android.view.Window} with given name.
+     *
      * @param name name of snapshot
      * @param currentWindow current visible {@link android.view.Window}
      */

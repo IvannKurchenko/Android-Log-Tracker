@@ -420,7 +420,8 @@ public final class LogConfiguration {
         }
 
         /**
-         * Set enabling or disabling saving of snapshots through using {@link com.logtracking.lib.api.SnapshotSaver}
+         * Set enabling or disabling saving of snapshots through using {@link com.logtracking.lib.api.SnapshotSaver}.
+         *
          * @param snapshotSavingEnable enabling or disabling saving of snapshots.
          * @return current instance.
          * @see com.logtracking.lib.api.SnapshotSaver
@@ -432,6 +433,7 @@ public final class LogConfiguration {
 
         /**
          * Set the format of the snapshot image. Used for bitmap compressing.
+         *
          * @param format format of the snapshot image.
          * @throws NullPointerException if format is null.
          * @return current instance.
@@ -446,6 +448,7 @@ public final class LogConfiguration {
 
         /**
          * Set the quality of snapshot image. Used for bitmap compressing.
+         *
          * @param quality quality of snapshot image.
          * @throws IllegalArgumentException if quality value out of bound 0-100.
          * @return current instance.
