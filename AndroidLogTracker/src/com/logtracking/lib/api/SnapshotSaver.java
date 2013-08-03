@@ -27,6 +27,7 @@ public class SnapshotSaver {
     /**
      * Save snapshot of current visible {@link android.app.Activity} with name
      * of this {@link android.app.Activity} class.
+     * Should be called from UI thread.
      *
      * @param currentActivity current visible {@link android.app.Activity}.
      */
@@ -36,6 +37,7 @@ public class SnapshotSaver {
 
     /**
      * Save snapshot of current visible {@link android.app.Activity} with given name.
+     * Should be called from UI thread.
      *
      * @param name name of snapshot.
      * @param currentActivity current visible {@link android.app.Activity}
@@ -46,6 +48,7 @@ public class SnapshotSaver {
 
     /**
      * Save snapshot of current visible {@link android.view.Window} with given name.
+     * Should be called from UI thread.
      *
      * @param name name of snapshot
      * @param currentWindow current visible {@link android.view.Window}
