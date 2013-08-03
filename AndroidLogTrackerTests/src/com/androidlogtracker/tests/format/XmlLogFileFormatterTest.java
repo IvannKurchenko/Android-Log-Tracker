@@ -105,7 +105,7 @@ public class XmlLogFileFormatterTest extends AbstractFormatterTest {
         assertElementAttributeEquals(element, key, keyValues.get(key));
     }
 
-    private Document tryParse(TestDocument testDocument){
+    protected Document tryParse(TestDocument testDocument){
         Document doc = null;
 
         try {
