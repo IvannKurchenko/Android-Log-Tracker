@@ -191,5 +191,8 @@ Using of library required next permissions for your application , depending of l
 * <code>android.permission.ACCESS_NETWORK_STATE</code> -  required permission for  checks what kind of networks works.   
 
 ##Third party libs and code
-This product includes software developed by the  Apache Software Foundation (http://www.apache.org/).  Also this library used e-mail port library for Android by address : http://code.google.com/p/javamail-android/.
+This product includes software developed by the  Apache Software Foundation (http://www.apache.org/).  
+This library used next third-party librarry : 
+* E-mail port library for Android by address : http://code.google.com/p/javamail-android/.
+* HTML parsing librarry Tidy by address : http://jtidy.sourceforge.net/.
 
