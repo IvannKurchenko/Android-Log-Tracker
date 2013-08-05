@@ -18,7 +18,7 @@ General report structure is next :
 DOCUMENT_CLOSE_TAG </code></pre>
 
 But, some of formats could not support some kind of tags.
-<br>Library supports formating of bug report in default, XML and JSON formats, here is example of formated reports: 
+<br>Library supports formating of bug report in default, XML, JSON and HTML formats, here is example of formated reports: 
 
 - **Default**
 
