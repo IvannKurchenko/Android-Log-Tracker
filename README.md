@@ -176,6 +176,8 @@ To take and save snapshot of currently visible screen of application you should 
 <br>Given name of snapshot is name of snapshot file. Saved snapshots will be attached to issue reports with other files.
 For more details about configuring and saving snapshot see javadoc of <code>SnapshotSaver</code> class.
 
+##Javadoc
+Full API documentation you could find [here](http://ivannkurchenko.github.io/Android-Log-Tracker/)
 ##Languages support
 At this moment library support only English, Russian and Ukrainian languages.
 
